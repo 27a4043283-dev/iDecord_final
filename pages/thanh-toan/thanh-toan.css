@@ -1,0 +1,393 @@
+/* ==========================
+   THANH TOÁN - iDECOR
+========================== */
+
+.checkout-page{
+    background:#f7f3ee;
+    padding:60px 0;
+    min-height:100vh;
+}
+
+.checkout-page *{
+    color:#222;
+}
+
+.checkout-container{
+    width:90%;
+    max-width:1400px;
+    margin:auto;
+}
+
+.checkout-header{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.checkout-header h1{
+    font-size:42px;
+    font-weight:600;
+    color:#1f1f1f;
+    letter-spacing:1px;
+}
+
+/* ==========================
+   LAYOUT
+========================== */
+
+.checkout-layout{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:30px;
+}
+
+/* ==========================
+   CARD
+========================== */
+
+.checkout-section{
+    background:#fff;
+    border-radius:18px;
+    padding:30px;
+    margin-bottom:25px;
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+}
+
+.checkout-section h2{
+    font-size:24px;
+    color:var(--accent-gold);
+    margin-bottom:25px;
+    padding-bottom:15px;
+    border-bottom:1px solid #eee;
+}
+
+/* ==========================
+   THÔNG TIN KHÁCH HÀNG
+========================== */
+
+.shipping-form{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.shipping-form input,
+.shipping-form select{
+    width:100%;
+    padding:15px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    background:#fff;
+    color:#222;
+    font-size:15px;
+    transition:.3s;
+}
+
+.shipping-form input:focus,
+.shipping-form select:focus{
+    border-color:var(--accent-gold);
+    outline:none;
+}
+
+.address-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+/* ==========================
+   DANH SÁCH SẢN PHẨM
+========================== */
+
+.product-item{
+    display:flex;
+    gap:20px;
+    padding:20px 0;
+    border-bottom:1px solid #eee;
+}
+
+.product-item:last-child{
+    border-bottom:none;
+}
+
+.product-image{
+    width:130px;
+    height:130px;
+    background:#f2f2f2;
+    border-radius:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#888;
+    font-size:14px;
+}
+
+.product-info{
+    flex:1;
+}
+
+.product-info h3{
+    font-size:22px;
+    margin-bottom:12px;
+}
+
+.product-info p{
+    margin-bottom:8px;
+    color:#666;
+}
+
+.product-price{
+    color:var(--accent-gold) !important;
+    font-size:18px;
+    font-weight:600;
+}
+
+/* ==========================
+   THANH TOÁN
+========================== */
+
+.payment-method{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.payment-card{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+
+    border:1px solid #e5e5e5;
+    border-radius:12px;
+
+    padding:18px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.payment-card:hover{
+    border-color:var(--accent-gold);
+    background:#faf8f4;
+}
+
+.payment-card input{
+    margin-right:10px;
+}
+
+.payment-card span{
+    font-size:16px;
+    font-weight:500;
+}
+
+.payment-card small{
+    color:#888;
+    margin-left:25px;
+}
+
+/* ==========================
+   TỔNG ĐƠN HÀNG
+========================== */
+
+.order-summary{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.summary-row span:first-child{
+    color:#666;
+}
+
+.summary-row span:last-child{
+    font-weight:500;
+}
+
+.total{
+    margin-top:10px;
+    padding-top:20px;
+    border-top:1px solid #ddd;
+}
+
+.total span{
+    font-size:24px;
+    font-weight:700 !important;
+    color:var(--accent-gold) !important;
+}
+
+/* ==========================
+   CAM KẾT
+========================== */
+
+.checkout-policy{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.checkout-policy label{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    line-height:1.7;
+    cursor:pointer;
+}
+
+.checkout-policy input{
+    margin-top:5px;
+}
+
+/* ==========================
+   BUTTON
+========================== */
+
+#generate-qr-btn{
+    width:100%;
+    padding:18px;
+    font-size:16px;
+    font-weight:600;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+.btn-gold{
+    background:var(--accent-gold);
+    color:#fff;
+    transition:.3s;
+}
+
+.btn-gold:hover{
+    opacity:.9;
+}
+
+/* ==========================
+   QR THANH TOÁN
+========================== */
+
+.qr-payment{
+    display:none;
+    text-align:center;
+}
+
+.qr-payment.active{
+    display:block;
+}
+
+.qr-box{
+    width:280px;
+    height:280px;
+
+    margin:25px auto;
+
+    border:1px solid #ddd;
+    border-radius:18px;
+
+    overflow:hidden;
+
+    background:#fff;
+}
+
+.qr-box img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.qr-timer{
+    font-size:30px;
+    font-weight:700;
+    color:var(--accent-gold);
+    margin-top:15px;
+}
+
+.qr-note{
+    margin-top:10px;
+    color:#666;
+    line-height:1.6;
+}
+
+/* ==========================
+   SCROLL DANH SÁCH SP
+========================== */
+
+#checkout-products{
+    max-height:700px;
+    overflow-y:auto;
+    padding-right:10px;
+}
+
+#checkout-products::-webkit-scrollbar{
+    width:6px;
+}
+
+#checkout-products::-webkit-scrollbar-thumb{
+    background:#c9a86a;
+    border-radius:20px;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media(max-width:992px){
+
+    .checkout-layout{
+        grid-template-columns:1fr;
+    }
+
+    .checkout-header h1{
+        font-size:34px;
+    }
+
+}
+
+@media(max-width:768px){
+
+    .address-grid{
+        grid-template-columns:1fr;
+    }
+
+    .product-item{
+        flex-direction:column;
+    }
+
+    .product-image{
+        width:100%;
+        height:220px;
+    }
+
+    .qr-box{
+        width:230px;
+        height:230px;
+    }
+
+}
+
+@media(max-width:576px){
+
+    .checkout-container{
+        width:95%;
+    }
+
+    .checkout-section{
+        padding:20px;
+    }
+
+    .checkout-header h1{
+        font-size:28px;
+    }
+
+    .total span{
+        font-size:20px;
+    }
+
+}

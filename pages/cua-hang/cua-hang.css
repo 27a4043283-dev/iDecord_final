@@ -1,0 +1,236 @@
+/* =========================
+TRANG CỬA HÀNG iDECOR
+========================= */
+
+.store-header{
+text-align:center;
+margin-bottom:60px;
+}
+
+.store-header h1{
+color:var(--text-light);
+font-size:32px;
+font-weight:400;
+text-transform:uppercase;
+letter-spacing:3px;
+margin-bottom:15px;
+}
+
+.store-header p{
+color:var(--text-gray);
+max-width:700px;
+margin:0 auto;
+line-height:1.8;
+}
+
+/* =========================
+THỐNG KÊ
+========================= */
+
+.store-stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+margin-bottom:70px;
+}
+
+.stat-box{
+background:var(--bg-card);
+border:1px solid rgba(255,255,255,0.05);
+border-radius:10px;
+padding:35px 20px;
+text-align:center;
+transition:var(--transition);
+}
+
+.stat-box:hover{
+transform:translateY(-5px);
+border-color:var(--accent-gold);
+}
+
+.stat-box h3{
+color:var(--accent-gold);
+font-size:36px;
+margin-bottom:10px;
+}
+
+.stat-box p{
+color:var(--text-gray);
+font-size:14px;
+letter-spacing:1px;
+}
+
+/* =========================
+SHOWROOM
+========================= */
+
+.branch-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:30px;
+margin-bottom:80px;
+}
+
+.branch-card{
+background:var(--bg-card);
+border:1px solid rgba(255,255,255,0.05);
+border-radius:10px;
+padding:35px;
+transition:var(--transition);
+}
+
+.branch-card:hover{
+transform:translateY(-6px);
+border-color:var(--accent-gold);
+box-shadow:0 12px 30px rgba(0,0,0,0.4);
+}
+
+.branch-card h3{
+color:var(--accent-gold);
+font-size:22px;
+margin-bottom:20px;
+text-transform:uppercase;
+}
+
+.branch-info{
+color:var(--text-gray);
+line-height:1.9;
+margin-bottom:25px;
+}
+
+.branch-info p{
+margin-bottom:8px;
+}
+
+.branch-buttons{
+display:flex;
+gap:12px;
+}
+
+.btn-br{
+flex:1;
+text-align:center;
+padding:12px;
+border-radius:6px;
+text-decoration:none;
+font-size:12px;
+font-weight:600;
+letter-spacing:1px;
+text-transform:uppercase;
+transition:var(--transition);
+}
+
+.btn-map{
+background:var(--accent-gold);
+color:var(--bg-dark);
+}
+
+.btn-map:hover{
+opacity:0.9;
+}
+
+.btn-dir{
+border:1px solid var(--accent-gold);
+color:var(--accent-gold);
+}
+
+.btn-dir:hover{
+background:rgba(197,168,128,0.1);
+}
+
+/* =========================
+TƯ VẤN
+========================= */
+
+.consult-section{
+background:var(--bg-card);
+padding:60px 40px;
+border-radius:12px;
+text-align:center;
+margin-bottom:80px;
+}
+
+.consult-section h2{
+color:var(--text-light);
+margin-bottom:20px;
+font-size:28px;
+}
+
+.consult-section p{
+color:var(--text-gray);
+max-width:700px;
+margin:0 auto 30px;
+line-height:1.8;
+}
+
+.btn-consult{
+display:inline-block;
+padding:14px 30px;
+background:var(--accent-gold);
+color:var(--bg-dark);
+text-decoration:none;
+border-radius:6px;
+font-weight:600;
+transition:var(--transition);
+}
+
+.btn-consult:hover{
+transform:translateY(-3px);
+}
+
+/* =========================
+MAP
+========================= */
+
+.map-section{
+margin-bottom:60px;
+}
+
+.map-section h2{
+text-align:center;
+color:var(--text-light);
+margin-bottom:30px;
+text-transform:uppercase;
+letter-spacing:2px;
+}
+
+.map-container{
+overflow:hidden;
+border-radius:12px;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+.map-container iframe{
+display:block;
+width:100%;
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+
+.store-stats{
+    grid-template-columns:1fr;
+}
+
+.branch-buttons{
+    flex-direction:column;
+}
+
+.consult-section{
+    padding:40px 25px;
+}
+
+.store-header h1{
+    font-size:24px;
+}
+
+.consult-section h2{
+    font-size:22px;
+}
+
+
+}

@@ -1,0 +1,290 @@
+<main class="checkout-page">
+
+    <div class="checkout-container">
+
+        <div class="checkout-header">
+            <h1>Thanh Toán Đơn Hàng</h1>
+        </div>
+
+        <div class="checkout-layout">
+
+            <!-- CỘT TRÁI -->
+            <div class="checkout-left">
+
+                <!-- ĐƠN HÀNG -->
+                <section class="checkout-section">
+
+                    <h2>Thông Tin Đơn Hàng</h2>
+
+                    <div id="checkout-products">
+
+                        <!-- JS render sản phẩm -->
+
+                        <div class="product-item">
+
+                            <div class="product-image">
+                                Ảnh SP
+                            </div>
+
+                            <div class="product-info">
+
+                                <h3>Tên sản phẩm</h3>
+
+                                <p>Số lượng: 1</p>
+
+                                <p>Đơn giá: 1.000.000 VNĐ</p>
+
+                                <p class="product-price">
+                                    Thành tiền: 1.000.000 VNĐ
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- THÔNG TIN KHÁCH HÀNG -->
+                <section class="checkout-section">
+
+                    <h2>Thông Tin Nhận Hàng</h2>
+
+                    <div class="shipping-form">
+
+                        <input
+                            type="text"
+                            id="customer-name"
+                            placeholder="Họ và tên">
+
+                        <input
+                            type="tel"
+                            id="customer-phone"
+                            placeholder="Số điện thoại">
+
+                        <input
+                            type="email"
+                            id="customer-email"
+                            placeholder="Email">
+
+                        <div class="address-grid">
+
+                            <select id="province">
+                                <option>
+                                    Chọn Tỉnh / Thành phố
+                                </option>
+                            </select>
+
+                            <select id="district">
+                                <option>
+                                    Chọn Quận / Huyện
+                                </option>
+                            </select>
+
+                            <select id="ward">
+                                <option>
+                                    Chọn Phường / Xã
+                                </option>
+                            </select>
+
+                        </div>
+
+                        <input
+                            type="text"
+                            id="address-detail"
+                            placeholder="Số nhà, tên đường, ngõ...">
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            <!-- CỘT PHẢI -->
+            <div class="checkout-right">
+
+                <!-- PHƯƠNG THỨC THANH TOÁN -->
+                <section class="checkout-section">
+
+                    <h2>Phương Thức Thanh Toán</h2>
+
+                    <div class="payment-method">
+
+                        <label class="payment-card">
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="vietqr">
+
+                            <span>
+                                Thanh toán VietQR
+                            </span>
+
+                        </label>
+
+                        <label class="payment-card">
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="wallet">
+
+                            <span>
+                                Ví điện tử
+                            </span>
+
+                            <small>
+                                Chức năng đang nâng cấp
+                            </small>
+
+                        </label>
+
+                        <label class="payment-card">
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="card">
+
+                            <span>
+                                Thẻ ngân hàng
+                            </span>
+
+                            <small>
+                                Chức năng đang nâng cấp
+                            </small>
+
+                        </label>
+
+                    </div>
+
+                </section>
+
+                <!-- TỔNG ĐƠN -->
+                <section class="checkout-section">
+
+                    <h2>Tổng Đơn Hàng</h2>
+
+                    <div class="order-summary">
+
+                        <div class="summary-row">
+
+                            <span>Tạm tính</span>
+
+                            <span id="subtotal">
+                                0 VNĐ
+                            </span>
+
+                        </div>
+
+                        <div class="summary-row">
+
+                            <span>Phí vận chuyển</span>
+
+                            <span id="shipping-fee">
+                                0 VNĐ
+                            </span>
+
+                        </div>
+
+                        <div class="summary-row total">
+
+                            <span>Tổng cộng</span>
+
+                            <span id="grand-total">
+                                0 VNĐ
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- CAM KẾT -->
+                <section class="checkout-section">
+
+                    <h2>Cam Kết Thanh Toán</h2>
+
+                    <div class="checkout-policy">
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                id="agree-info">
+
+                            <span>
+                                Tôi xác nhận thông tin đặt hàng là chính xác.
+                            </span>
+
+                        </label>
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                id="agree-policy">
+
+                            <span>
+                                Tôi đồng ý với chính sách thanh toán và giao hàng.
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </section>
+
+                <!-- NÚT THANH TOÁN -->
+                <section class="checkout-section">
+
+                    <button
+                        id="generate-qr-btn"
+                        class="btn btn-gold">
+
+                        Tiến Hành Thanh Toán
+
+                    </button>
+
+                </section>
+
+                <!-- QR THANH TOÁN -->
+                <section
+                    id="qr-payment"
+                    class="checkout-section qr-payment">
+
+                    <h2>Mã QR Thanh Toán</h2>
+
+                    <div class="qr-box">
+
+                        <img
+                            id="qr-image"
+                            src=""
+                            alt="QR Thanh Toán">
+
+                    </div>
+
+                    <div class="qr-timer">
+
+                        10:00
+
+                    </div>
+
+                    <p class="qr-note">
+
+                        Mã QR có hiệu lực trong 10 phút
+
+                    </p>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>

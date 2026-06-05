@@ -1,0 +1,234 @@
+/* =========================
+   TRANG GIỎ HÀNG
+========================= */
+
+.cart-page {
+    padding: 80px 0;
+    min-height: 70vh;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.page-title {
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.page-subtitle {
+    color: var(--text-gray);
+    font-size: 14px;
+}
+
+/* =========================
+   BẢNG GIỎ HÀNG
+========================= */
+
+.cart-table-wrapper {
+    overflow-x: auto;
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cart-table th {
+    padding: 18px;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cart-table td {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cart-product {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cart-product img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.cart-product-info {
+    text-align: left;
+}
+
+.cart-product-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.cart-product-id {
+    font-size: 13px;
+    color: var(--text-gray);
+}
+
+/* =========================
+   SỐ LƯỢNG
+========================= */
+
+.qty-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.qty-btn {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.qty-btn:hover {
+    transform: translateY(-2px);
+}
+
+.qty-value {
+    min-width: 30px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* =========================
+   GIÁ
+========================= */
+
+.price {
+    font-weight: 600;
+}
+
+.subtotal {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+/* =========================
+   XÓA
+========================= */
+
+.remove-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.remove-btn:hover {
+    transform: scale(1.1);
+}
+
+/* =========================
+   TỔNG ĐƠN
+========================= */
+
+.cart-summary {
+    margin-top: 30px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summary-label {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.summary-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.cart-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+/* =========================
+   GIỎ HÀNG TRỐNG
+========================= */
+
+.empty-cart {
+    background: var(--bg-card);
+    padding: 80px 30px;
+    text-align: center;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.empty-cart-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.empty-cart h2 {
+    margin-bottom: 10px;
+}
+
+.empty-cart p {
+    color: var(--text-gray);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .page-title {
+        font-size: 28px;
+    }
+
+    .cart-product {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cart-product-info {
+        text-align: center;
+    }
+
+    .cart-actions {
+        flex-direction: column;
+    }
+
+    .cart-actions .btn {
+        width: 100%;
+    }
+
+    .summary-value {
+        font-size: 22px;
+    }
+}

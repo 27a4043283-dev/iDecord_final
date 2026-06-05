@@ -1,0 +1,483 @@
+/* Reset */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:"Montserrat",sans-serif;
+    background:var(--background);
+    color:var(--text);
+    overflow-x:hidden;
+}
+
+/* Variables */
+
+:root{
+    --primary:#8B6B4A;
+    --secondary:#C4A484;
+    --background:#F8F6F2;
+    --surface:#FFFFFF;
+    --text:#2D2D2D;
+    --text-light:#666666;
+    --border:#E5E5E5;
+    --shadow:0 4px 20px rgba(0,0,0,.08);
+    --transition:all .3s ease;
+}
+
+/* Global */
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+ul{
+    list-style:none;
+}
+
+img{
+    display:block;
+    max-width:100%;
+}
+
+button{
+    border:none;
+    background:none;
+    cursor:pointer;
+    font-family:inherit;
+}
+
+input,
+textarea,
+select{
+    font-family:inherit;
+    outline:none;
+}
+
+.container{
+    width:min(1200px,92%);
+    margin:auto;
+}
+
+/* Header */
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:var(--surface);
+    box-shadow:var(--shadow);
+    padding:20px 8%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* Logo */
+
+.logo{
+    font-size:28px;
+    font-weight:700;
+    letter-spacing:2px;
+}
+
+.logo span{
+    color:var(--primary);
+}
+
+/* Navbar */
+
+.navbar{
+    display:flex;
+    align-items:center;
+    gap:32px;
+}
+
+/* ==========================
+   PRODUCT MENU
+========================== */
+
+.product-menu {
+    position: relative;
+}
+
+.product-dropdown {
+    position: absolute;
+    top: calc(100% + 15px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 240px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+.product-menu:hover .product-dropdown {
+    display: flex;
+}
+
+.product-dropdown a {
+    padding: 14px 18px;
+    font-size: 14px;
+    transition: var(--transition);
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.product-dropdown a:last-child {
+    border-bottom: none;
+}
+
+.product-dropdown a:hover {
+    background: #f8f8f8;
+    color: var(--primary);
+}
+
+.navbar a{
+    font-size:14px;
+    font-weight:500;
+    transition:var(--transition);
+}
+
+.navbar a:hover,
+.navbar a.active{
+    color:var(--primary);
+}
+
+/* ==========================================================================
+   TÍNH NĂNG ĐÃ SỬA: THANH TÌM KIẾM TINH TẾ KHÔNG BỊ XẤU
+   ========================================================================== */
+
+.nav-actions{
+    display:flex;
+    align-items:center;
+    gap:24px;
+}
+
+.header-search-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #E0DCD5;
+    background: #FBFBFA;
+    padding: 6px 12px;
+    border-radius: 20px; /* Bo tròn mềm mại phong cách tối giản */
+    transition: var(--transition);
+}
+
+.header-search-box:focus-within {
+    border-color: var(--primary);
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(139, 107, 74, 0.05);
+}
+
+#headerSearchInput {
+    border: none !important;
+    background: transparent !important;
+    outline: none !important;
+    font-size: 13px;
+    color: var(--text);
+    width: 120px; /* Độ rộng vừa phải thanh lịch */
+    transition: width 0.3s ease;
+}
+
+#headerSearchInput:focus {
+    width: 160px; /* Giãn rộng nhẹ nhàng khi nhập liệu */
+}
+
+.search-submit-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #8E8880;
+    display: flex;
+    align-items: center;
+    padding-left: 6px;
+    transition: color 0.2s ease;
+}
+
+.search-submit-btn:hover {
+    color: var(--primary);
+}
+
+.nav-actions a{
+    font-size:14px;
+    transition:var(--transition);
+}
+
+.nav-actions a:hover {
+    color:var(--primary);
+}
+
+/* Main */
+
+#main-content{
+    min-height:80vh;
+}
+
+/* Section */
+
+.section{
+    padding:80px 0;
+}
+
+.section-title{
+    font-size:32px;
+    font-weight:600;
+    margin-bottom:40px;
+    text-align:center;
+}
+
+/* Button */
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:12px 24px;
+    border-radius:8px;
+    transition:var(--transition);
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:white;
+}
+
+.btn-primary:hover{
+    opacity:.9;
+}
+
+.btn-outline{
+    border:1px solid var(--primary);
+    color:var(--primary);
+}
+
+.btn-outline:hover{
+    background:var(--primary);
+    color:white;
+}
+
+.account-menu {
+    position: relative;
+}
+
+.account-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    min-width: 220px;
+    background: #fff;
+    border: 1px solid #ddd;
+    display: none;
+    flex-direction: column;
+    z-index: 999;
+}
+
+.account-dropdown a {
+    padding: 12px 16px;
+    color: #111;
+    text-decoration: none;
+}
+
+.account-dropdown a:hover {
+    background: #f5f5f5;
+}
+
+.account-menu:hover .account-dropdown {
+    display: flex;
+}
+
+/* ==========================================================================
+   TÁI CẤU TRÚC: CHÂN TRANG (FOOTER THEO LAYOUT ẢNH MẪU CỦA BẠN)
+   ========================================================================== */
+
+.footer{
+    background: #FAF8F5 !important; /* Màu kem nhạt sang trọng đồng bộ nền ảnh mẫu */
+    color: var(--text) !important;
+    border-top: 1px solid var(--border);
+    padding: 80px 8% 30px;
+}
+
+.footer-grid{
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr; /* Tỉ lệ phân chia cột chuẩn */
+    gap: 50px;
+    margin-bottom: 40px;
+}
+
+/* Cột Thương hiệu */
+.footer-column.col-brand p {
+    margin-top: 16px;
+    color: var(--text-light);
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+/* Khối Khách hàng tin tưởng */
+.customer-trust {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.avatar-group {
+    display: flex;
+    align-items: center;
+}
+
+.avatar-trust-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #FAF8F5;
+    margin-right: -10px; /* Hiệu ứng xếp chồng nghệ thuật */
+    flex-shrink: 0; /* Khắc phục triệt để lỗi ảnh bị bóp méo */
+}
+
+.trust-text {
+    font-size: 13.5px;
+    color: var(--text);
+    margin-left: 15px;
+    white-space: nowrap;
+}
+
+.trust-text strong {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* Các cột thông tin */
+.footer-column h4 {
+    margin-bottom: 24px;
+    color: var(--primary);
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.footer-column ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-column a {
+    color: var(--text-light);
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.footer-column a:hover {
+    color: var(--primary);
+}
+
+/* Danh sách liên hệ */
+.contact-list li {
+    font-size: 14px;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+/* Đáy Chân Trang */
+.footer-bottom{
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+    padding-top: 25px;
+    text-align: center;
+    color: var(--text-light);
+    font-size: 13px;
+}
+
+/* ==========================================================================
+   RESPONSIVE (Tối ưu thiết bị di động)
+   ========================================================================== */
+
+@media (max-width:992px){
+    .header{
+        flex-wrap:wrap;
+        gap:20px;
+        padding: 20px 4%;
+    }
+
+    .navbar{
+        gap:20px;
+    }
+
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+
+    .section-title{
+        font-size:28px;
+    }
+}
+
+@media (max-width:768px){
+    .header{
+        flex-direction:column;
+        gap: 15px;
+    }
+
+    .navbar{
+        flex-wrap:wrap;
+        justify-content:center;
+        gap: 15px;
+    }
+
+    .nav-actions{
+        justify-content:center;
+        width: 100%;
+        flex-direction: column-reverse; 
+        gap: 15px;
+    }
+
+    .header-search-box {
+        width: 100%;
+        max-width: 240px;
+    }
+
+    #headerSearchInput {
+        width: 100%;
+    }
+
+    #headerSearchInput:focus {
+        width: 100%;
+    }
+
+    .section{
+        padding:60px 0;
+    }
+
+    .section-title{
+        font-size:24px;
+    }
+
+    .footer{
+        padding: 60px 5% 30px;
+        text-align: center;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+
+    .customer-trust {
+        justify-content: center;
+    }
+}

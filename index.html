@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iDECOR - Nội Thất Cao Cấp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./pages/trang-chu/trang-chu.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <a href="#/trang-chu" class="logo">
+            i<span>DECOR</span>
+        </a>
+
+        <nav class="navbar">
+            <a href="#/trang-chu" class="active">Trang Chủ</a>
+            <a href="#/gioi-thieu">Giới Thiệu</a>
+            <div class="product-menu">
+                <a href="#/san-pham">Sản Phẩm</a>
+                <div class="product-dropdown" id="productDropdown"></div>
+            </div>
+            <a href="#/cua-hang">Cửa Hàng</a>
+            <a href="#/khach-hang">Khách Hàng</a>
+        </nav>
+
+        <div class="nav-actions">
+            <div class="header-search-box">
+                <input type="text" placeholder="Tìm sản phẩm..." id="headerSearchInput">
+                <button type="button" class="search-submit-btn">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+            </div>
+
+            <a href="#/gio-hang">Giỏ Hàng</a>
+            <div class="account-menu" id="accountMenu">
+                <a href="#/dang-nhap" id="accountLink">Tài Khoản</a>
+                <div class="account-dropdown" id="accountDropdown">
+                    <a href="#/thong-tin-khach-hang">Thông tin khách hàng</a>
+                    <a href="#/doi-mat-khau">Đổi mật khẩu</a>
+                    <a href="#" id="logoutBtn">Đăng xuất</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content"></main>
+
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-column col-brand">
+                <a href="#/trang-chu" class="logo">
+                    i<span>DECOR</span>
+                </a>
+                <p>
+                    iDECOR tự hào mang đến giải pháp nội thất hiện đại, tối giản và sang trọng cho hơn 16.000 không gian sống.<br>
+                    Khách hàng của iDECOR đã vượt mốc 10.000 người, minh chứng cho sự yêu mến và ủng hộ từ cộng đồng!
+                </p>
+                <div class="customer-trust">
+                    <div class="avatar-group">
+                        <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=80&h=80&q=80" alt="User" class="avatar-trust-img">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&h=80&q=80" alt="User" class="avatar-trust-img">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=80&h=80&q=80" alt="User" class="avatar-trust-img">
+                    </div>
+                    <span class="trust-text"><strong>10.000+</strong> Khách hàng tin tưởng</span>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>Về Chúng Tôi</h4>
+                <ul>
+                    <li><a href="#/dieu-khoan">Điều Khoản Dịch Vụ</a></li>
+                    <li><a href="#/">Liên Hệ</a></li>
+                    <li><a href="#/gioi-thieu">Giới Thiệu</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Liên Hệ</h4>
+                <ul class="contact-list">
+                    <li>📍 Hà Nội, Việt Nam</li>
+                    <li>📞 0987 123 456</li>
+                    <li>📞 0243 XXXXXX</li>
+                    <li>✉️ contact@idecor.vn</li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Sản Phẩm</h4>
+                <ul>
+                    <li><a href="#/san-pham">Nội Thất Phòng Khách</a></li>
+                    <li><a href="#/san-pham">Nội Thất Phòng Ngủ</a></li>
+                    <li><a href="#/san-pham">Nội Thất Văn Phòng</a></li>
+                    <li><a href="#/san-pham">Bộ Sưu Tập Mới</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 iDECOR. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <script src="./scripts.js"></script>
+    
+    <script src="./pages/trang-chu/trang-chu.js"></script>
+</body>
+
+</html>
