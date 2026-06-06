@@ -1,5 +1,5 @@
 (() => {
-const SP_PATH = "./assets/data/SanPham_300Dong.csv";
+const SP_PATH = "../assets/data/SanPham_300Dong.csv";
 
 const PRODUCTS_PER_PAGE = 30;
 
