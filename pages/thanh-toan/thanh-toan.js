@@ -43,7 +43,7 @@ const ACCOUNT_NAME =
 const cart =
     JSON.parse(
         localStorage.getItem(
-            "cart"
+            "checkoutItems"
         )
     ) || [];
 
@@ -734,10 +734,32 @@ function checkout() {
         "Đặt hàng thành công"
     );
 
-    localStorage.removeItem(
-        "cart"
+    const fullCart =
+        JSON.parse(
+            localStorage.getItem("cart")
+        ) || [];
+
+    const checkoutItems =
+        JSON.parse(
+            localStorage.getItem("checkoutItems")
+        ) || [];
+
+    const remainCart =
+        fullCart.filter(
+            item =>
+                !checkoutItems.some(
+                    c => c.maSP === item.maSP
+                )
+        );
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(remainCart)
     );
 
+    localStorage.removeItem(
+        "checkoutItems"
+    );
     location.hash =
         "#/hoan-tat";
 }
