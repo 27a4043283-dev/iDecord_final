@@ -1,6 +1,6 @@
 (() => {
     const CSV_PATH =
-    "../../assets/data/SanPham_300Dong.csv";
+    "./assets/data/SanPham_300Dong.csv";
 
 initProductDetail();
 
