@@ -256,7 +256,11 @@ function goToCheckout() {
 
         return;
     }
-    console.log("CHANGE HASH");
+
+    localStorage.setItem(
+        "checkoutItems",
+        JSON.stringify(selectedProducts)
+    );
 
     location.hash =
         "#/thanh-toan";
