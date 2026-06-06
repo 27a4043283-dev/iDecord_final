@@ -384,6 +384,8 @@ function renderProducts() {
         <div class="product-grid">
 
         ${products.map(product => {
+            console.log(product.MaSP);
+            console.log(product.HinhAnh);
 
             const imageUrl =
                 product.HinhAnh
