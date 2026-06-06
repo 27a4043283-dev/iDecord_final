@@ -1,97 +1,111 @@
 <main class="customers-page">
-
-    <!-- Banner -->
-    <section class="customers-hero">
-        <div class="container">
-            <h1>Khách Hàng Nói Gì Về Chúng Tôi</h1>
-
-            <blockquote>
-                Những đánh giá chân thực từ khách hàng đã sử dụng
-                sản phẩm nội thất của chúng tôi.
-            </blockquote>
+    <section class="idecor-banner">
+        <div class="banner-overlay"></div>
+        <div class="banner-content">
+            <h1>Khách Hàng Của iDECOR</h1>
+ 
         </div>
     </section>
 
-    <!-- Thống kê -->
     <section class="customers-stats">
         <div class="container">
-
             <div class="stats-grid">
-
                 <div class="stat-card">
-                    <h2 id="totalFeedbacks">0</h2>
+                    <h2 id="totalFeedbacks">100</h2>
                     <span>Đánh Giá</span>
                 </div>
-
                 <div class="stat-card">
-                    <h2 id="averageRating">0.0</h2>
+                    <h2 id="averageRating">4.9</h2>
                     <span>Điểm Trung Bình</span>
                 </div>
-
                 <div class="stat-card">
-                    <h2 id="fiveStarPercent">0%</h2>
+                    <h2 id="fiveStarPercent">100%</h2>
                     <span>Đánh Giá Tích Cực</span>
                 </div>
-
             </div>
-
         </div>
     </section>
 
-    <!-- Danh sách feedback -->
     <section class="feedback-section">
         <div class="container">
-
             <div class="section-title">
                 <h2>Đánh Giá Từ Khách Hàng</h2>
-                <p>
-                    Cảm nhận thực tế từ những khách hàng đã trải nghiệm sản phẩm.
-                </p>
+                <p>Cảm nhận thực tế từ những tổ ấm đã được khơi nguồn cảm hứng bởi iDECOR.</p>
             </div>
 
-            <div id="feedbackList" class="feedback-grid">
+            <div id="feedbackList" class="yenhoa-feedback-grid"></div>
 
-                <!-- JS render tại đây -->
+            <div class="load-more">
+                <button id="loadMoreBtn" class="btn-primary">Xem thêm đánh giá</button>
+            </div>
+        </div>
+    </section>
 
-                <!-- Ví dụ card -->
-
-                <!--
-                <div class="feedback-card">
-
-                    <div class="feedback-header">
-                        <div class="feedback-avatar">
-                            N
+    <section class="feedback-form-section">
+        <div class="container">
+            <div class="form-card-wrapper">
+                <div class="form-header-zone">
+                    <h2>Gửi Đánh Giá Của Bạn</h2>
+                    <p>Ý kiến của bạn giúp iDECOR hoàn thiện không gian sống mỗi ngày</p>
+                </div>
+                
+                <form id="idecor-feedback-form" class="premium-form">
+                    <div class="form-grid-2col">
+                        <div class="form-group-custom">
+                            <label for="fb-name">Họ và tên *</label>
+                            <input type="text" id="fb-name" required placeholder="Nhập họ và tên của bạn...">
                         </div>
-
-                        <div class="feedback-user">
-                            <h3>Nguyễn Văn A</h3>
-
-                            <div class="feedback-rating">
-                                ⭐⭐⭐⭐⭐
-                            </div>
+                        <div class="form-group-custom">
+                            <label for="fb-job">Nghề nghiệp / Loại công trình *</label>
+                            <input type="text" id="fb-job" required placeholder="Ví dụ: Căn hộ Penthouse, Biệt thự...">
                         </div>
                     </div>
 
-                    <p class="feedback-comment">
-                        Sản phẩm rất đẹp và chất lượng.
-                    </p>
+                    <div class="form-grid-2col">
+                        <div class="form-group-custom">
+                            <label for="fb-avatar">Ảnh chân dung (Không bắt buộc)</label>
+                            <input type="url" id="fb-avatar" placeholder="https://example.com/avatar.jpg">
+                        </div>
+                        <div class="form-group-custom">
+                            <label for="fb-thumb">Ảnh thực tế sản phẩm (Không bắt buộc)</label>
+                            <input type="url" id="fb-thumb" placeholder="https://example.com/phong-khach.jpg">
+                        </div>
+                    </div>
 
-                    <span class="feedback-date">
-                        01/06/2026
-                    </span>
+                    <div class="form-grid-2col">
+                        <div class="form-group-custom">
+                            <label for="fb-type">Loại phản hồi *</label>
+                            <select id="fb-type" required>
+                                <option value="" disabled selected>-- Chọn loại phản hồi --</option>
+                                <option value="Căn hộ cao cấp">Căn hộ cao cấp</option>
+                                <option value="Thi công trọn gói">Thi công trọn gói</option>
+                                <option value="Khách hàng thân thiết">Khách hàng thân thiết</option>
+                                <option value="Nhà phố / Biệt thự">Nhà phố / Biệt thự</option>
+                            </select>
+                        </div>
+                        <div class="form-group-custom">
+                            <label for="fb-stars">Mức độ hài lòng *</label>
+                            <select id="fb-stars" required>
+                                <option value="" disabled selected>-- Chọn số sao --</option>
+                                <option value="5">★★★★★ Rất hài lòng</option>
+                                <option value="4">★★★★ Hài lòng</option>
+                                *<option value="3">★★★ Bình thường</option>
+                            </select>
+                        </div>
+                    </div>
 
-                </div>
-                -->
+                    <div class="form-group-custom full-width">
+                        <label for="fb-content">Nội dung đánh giá *</label>
+                        <textarea id="fb-content" rows="4" required placeholder="Hãy chia sẻ trải nghiệm thực tế của bạn về chất lượng hoàn thiện, nước sơn, tiến độ bàn giao của iDECOR..."></textarea>
+                    </div>
 
+                    <div class="form-action-zone">
+                        <button type="submit" class="btn-premium-submit">
+                            <span>Gửi đánh giá ngay</span>
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            <div class="load-more">
-                <button id="loadMoreBtn" class="btn-primary">
-                    Xem thêm đánh giá
-                </button>
-            </div>
-
         </div>
     </section>
-
 </main>

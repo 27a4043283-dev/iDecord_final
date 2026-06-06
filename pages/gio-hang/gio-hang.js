@@ -1,5 +1,6 @@
 (() => {
     console.log("=== GIO HANG JS LOADED ===");
+    let selectedItems = [];
 /* ==========================
    KIỂM TRA ĐĂNG NHẬP
 ========================== */
@@ -172,6 +173,66 @@ function calculateTotal(cart) {
 
 }
 
+function attachCheckboxEvents() {
+
+    const checkboxes =
+        document.querySelectorAll(
+            ".item-checkbox"
+        );
+
+    checkboxes.forEach(cb => {
+
+        cb.addEventListener(
+            "change",
+            updateSelectedSummary
+        );
+
+    });
+
+}
+
+function updateSelectedSummary() {
+
+    const cart =
+        getCart();
+
+    selectedItems = [];
+
+    document
+        .querySelectorAll(
+            ".item-checkbox:checked"
+        )
+        .forEach(cb => {
+
+            selectedItems.push(
+                cb.dataset.id
+            );
+
+        });
+
+    const selectedProducts =
+        cart.filter(item =>
+            selectedItems.includes(
+                item.maSP
+            )
+        );
+
+    const total =
+        selectedProducts.reduce(
+            (sum, item) =>
+                sum +
+                item.gia *
+                item.soLuong,
+            0
+        );
+
+    updateSummary(
+        selectedProducts.length,
+        total
+    );
+
+}
+
 /* ==========================
    THANH TOÁN
 ========================== */
@@ -180,19 +241,21 @@ function goToCheckout() {
 
     console.log("GO TO CHECKOUT");
 
-    const cart =
-        getCart();
+    const cart = getCart();
 
-    console.log("Cart:", cart);
+    const selectedProducts =
+        cart.filter(item =>
+            selectedItems.includes(item.maSP)
+        );
 
-    if (cart.length === 0) {
+    if (selectedProducts.length === 0) {
 
-        console.log("EMPTY CART");
+        alert(
+            "Vui lòng chọn sản phẩm để thanh toán."
+        );
 
-        alert("Giỏ hàng đang trống.");
         return;
     }
-
     console.log("CHANGE HASH");
 
     location.hash =
@@ -269,11 +332,12 @@ function renderCart() {
 
             <div class="cart-item">
 
-                <input
-                    type="checkbox"
-                    checked
-                >
-
+            <input
+                type="checkbox"
+                class="item-checkbox"
+                data-id="${item.maSP}"
+                ${selectedItems.includes(item.maSP) ? "checked" : ""}
+>
                 <img
                     src="${item.hinhAnh}"
                     alt="${item.tenSP}"
@@ -356,14 +420,11 @@ function renderCart() {
     cartItems.innerHTML =
         html;
 
-    const total =
-        calculateTotal(
-            cart
-        );
+    attachCheckboxEvents();
 
     updateSummary(
-        cart.length,
-        total
+        0,
+        0
     );
 
     updateCartBadge();
@@ -467,6 +528,35 @@ function updateCartBadge() {
 renderCart();
 
 updateCartBadge();
+
+const selectAll =
+    document.getElementById(
+        "selectAll"
+    );
+
+if (selectAll) {
+
+    selectAll.addEventListener(
+        "change",
+        function () {
+
+            document
+                .querySelectorAll(
+                    ".item-checkbox"
+                )
+                .forEach(cb => {
+
+                    cb.checked =
+                        this.checked;
+
+                });
+
+            updateSelectedSummary();
+
+        }
+    );
+
+}
 
 const checkoutBtn =
     document.getElementById(

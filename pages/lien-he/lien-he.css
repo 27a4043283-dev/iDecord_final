@@ -1,0 +1,199 @@
+/* --- PHẠM VI KHÔNG GIAN LIÊN HỆ iDECOR --- */
+.idecor-contact-section {
+    width: 100%;
+    min-height: 80vh;
+    background-color: #FBF7F2; /* Màu nền be nhạt cao cấp của iDECOR */
+    padding: 60px 20px;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.idecor-contact-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* --- TIÊU ĐỀ CHÍNH --- */
+.idecor-contact-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.idecor-contact-title {
+    font-size: 32px;
+    color: #A0845E; /* Màu nâu đậm hơn chữ nền để tạo điểm nhấn */
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.idecor-contact-subtitle {
+    font-size: 15px;
+    color: #8C8479;
+    font-style: italic;
+}
+
+/* --- BỐ CỤC LƯỚI HAI CỘT --- */
+.idecor-contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.7fr;
+    gap: 30px;
+    align-items: start;
+}
+
+/* --- ĐỊNH DẠNG BOX CHUNG --- */
+.idecor-info-card, 
+.idecor-form-card {
+    background-color: #FFFFFF;
+    border: 1px solid #EFEAE2;
+    border-radius: 16px;
+    padding: 35px;
+    box-shadow: 0 10px 30px rgba(197, 168, 128, 0.05); /* Bóng đổ đổ khối vàng nhạt */
+}
+
+.idecor-card-title {
+    font-size: 22px;
+    color: #C5A880; /* Màu thương hiệu iDECOR */
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-weight: 600;
+    border-bottom: 1px solid #F3EDE2;
+    padding-bottom: 12px;
+}
+
+/* --- CỘT THÔNG TIN BÊN TRÁI --- */
+.idecor-info-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.idecor-info-item:last-child {
+    margin-bottom: 0;
+}
+
+.idecor-info-icon {
+    font-size: 18px;
+    color: #C5A880;
+    background-color: #FAF5EE;
+    padding: 12px;
+    border-radius: 50%;
+    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.idecor-info-text h3 {
+    margin: 0 0 4px 0;
+    font-size: 15px;
+    color: #4A4640;
+    font-weight: 600;
+}
+
+.idecor-info-text p {
+    margin: 0;
+    font-size: 14px;
+    color: #7D766D;
+    line-height: 1.5;
+}
+
+/* --- CỘT FORM GỬI TIN BÊN PHẢI --- */
+.idecor-contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.idecor-form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.idecor-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.idecor-form-group label {
+    font-size: 14px;
+    color: #5A544C;
+    font-weight: 500;
+}
+
+.idecor-form-group label i {
+    color: #C5A880;
+    margin-right: 4px;
+    font-size: 13px;
+}
+
+.idecor-form-group input,
+.idecor-form-group select,
+.idecor-form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #E1D9CE;
+    border-radius: 8px;
+    background-color: #FAFAFA;
+    font-size: 14px;
+    color: #333333;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.idecor-form-group input:focus,
+.idecor-form-group select:focus,
+.idecor-form-group textarea:focus {
+    border-color: #C5A880;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(197, 168, 128, 0.15);
+}
+
+/* --- NÚT GỬI MÀU VÀNG NÂU iDECOR --- */
+.idecor-btn-submit {
+    background-color: #C5A880; /* Đồng bộ màu Đăng ký ngay ở trang chủ */
+    color: #FFFFFF;
+    border: none;
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor:pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    margin-top: 5px;
+    align-self: flex-start;
+    text-transform: uppercase;
+}
+
+.idecor-btn-submit:hover {
+    background-color: #B3966E;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(197, 168, 128, 0.3);
+}
+
+/* --- THÍCH ỨNG DI ĐỘNG (RESPONSIVE) --- */
+@media (max-width: 768px) {
+    .idecor-contact-grid {
+        grid-template-columns: 1fr;
+    }
+    .idecor-form-row {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .idecor-btn-submit {
+        width: 100%;
+    }
+    .idecor-contact-title {
+        font-size: 26px;
+    }
+}
