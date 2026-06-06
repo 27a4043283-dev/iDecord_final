@@ -4,7 +4,6 @@ const routes = {
     "/trang-chu": "trang-chu",
     "/gioi-thieu": "gioi-thieu",
     "/san-pham": "san-pham",
-    "/danh-muc-sp": "danh-muc-sp",
     "/chi-tiet-sp": "chi-tiet-sp",
     "/cua-hang": "cua-hang",
     "/khach-hang": "khach-hang",
@@ -15,7 +14,8 @@ const routes = {
     "/doi-mat-khau": "doi-mat-khau",
     "/thanh-toan": "thanh-toan",
     "/dieu-khoan": "dieu-khoan",
-    "/lien-he": "lien-he" // ĐÃ SỬA: Thêm trang liên hệ vào danh sách quản lý của Router chung
+    "/lien-he": "lien-he",
+    "/thong-tin-khach-hang": "thong-tin-khach-hang" // ĐÃ SỬA: Thêm trang liên hệ vào danh sách quản lý của Router chung
 };
 
 /* Biến toàn cục */
