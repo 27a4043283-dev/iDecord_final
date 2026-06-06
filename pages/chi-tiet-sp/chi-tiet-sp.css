@@ -198,7 +198,7 @@
 .btn-buy-now {
     background-color: #8b6b4a;
     border: none;
-    color: #FFFFFF;
+    color: #fff !important;
     flex-grow: 1;
 }
 .btn-buy-now:hover { background-color: #A38972; }
