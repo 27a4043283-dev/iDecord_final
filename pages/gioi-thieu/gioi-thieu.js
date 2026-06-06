@@ -1,3 +1,4 @@
+(() => {
 document.addEventListener(
     "DOMContentLoaded",
     initAboutPage
@@ -140,3 +141,4 @@ function revealOnScroll() {
     );
 
 }
+})();

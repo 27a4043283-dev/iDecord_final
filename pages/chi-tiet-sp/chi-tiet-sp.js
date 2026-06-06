@@ -1,455 +1,434 @@
-const CHI_TIET_SP_URL =
-"https://script.google.com/macros/s/AKfycbxigEyl3ZW_MTnoIvLlRrmlNJetunsIrPktedxnHU3DeHVSWwy1kQqj9P0VsAh2lF_V/exec";
+(() => {
+    const CSV_PATH =
+    "../../assets/data/SanPham_300Dong.csv";
 
-let currentProduct = null;
-let relatedProducts = [];
+initProductDetail();
 
-/* ==========================
-URL PARAM
-========================== */
-
-function getProductId() {
-
-
-const query =
-    window.location.hash
-    .split("?")[1];
-
-if (!query) {
-    return null;
-}
-
-const params =
-    new URLSearchParams(
-        query
-    );
-
-return params.get("id");
-
-
-}
-
-/* ==========================
-LOAD PRODUCT
-========================== */
-
-async function loadProduct() {
-
-
-try {
-
-    const response =
-        await fetch(
-            `${CHI_TIET_SP_URL}?action=getProducts`
-        );
-
-    const result =
-        await response.json();
-
-    if (
-        !result.success
-    ) {
-        return;
-    }
-
-    relatedProducts =
-        result.products || [];
+async function initProductDetail() {
+    console.log("chi tiet da chay");
 
     const productId =
-        getProductId();
-
-    currentProduct =
-        relatedProducts.find(
-            item =>
-                item.maSP ===
-                productId
+        localStorage.getItem(
+            "selectedProductId"
         );
 
-    if (!currentProduct) {
+    if (!productId) {
 
-        document.querySelector(
-            ".product-detail-page"
-        ).innerHTML =
-
-        `
-        <div class="container">
-            <h2>
-                Không tìm thấy sản phẩm
-            </h2>
-        </div>
-        `;
+        document.getElementById(
+            "product-title-val"
+        ).textContent =
+            "Không tìm thấy sản phẩm";
 
         return;
     }
 
-    renderProduct();
+    try {
 
-    renderRelatedProducts();
+        const response =
+            await fetch(CSV_PATH);
 
-    initQuantity();
+        const csv =
+            await response.text();
 
-    initButtons();
+        const products =
+            parseCSV(csv);
 
-}
-catch (error) {
+        const product =
+            products.find(
+                p =>
+                    p.MaSP === productId
+            );
 
-    console.error(error);
+        if (!product) {
 
-}
+            document.getElementById(
+                "product-title-val"
+            ).textContent =
+                "Sản phẩm không tồn tại";
 
-
-}
-
-/* ==========================
-FORMAT PRICE
-========================== */
-
-function formatPrice(price) {
-
-
-return Number(price)
-.toLocaleString(
-    "vi-VN"
-) + " VNĐ";
-
-
-}
-
-/* ==========================
-RENDER PRODUCT
-========================== */
-
-function renderProduct() {
-
-
-document.getElementById(
-    "product-image"
-).src =
-    currentProduct.hinhAnh;
-
-document.getElementById(
-    "product-name"
-).textContent =
-    currentProduct.tenSP;
-
-document.getElementById(
-    "product-price"
-).textContent =
-    formatPrice(
-        currentProduct.gia
-    );
-
-document.getElementById(
-    "product-short-desc"
-).textContent =
-    currentProduct.moTa;
-
-document.getElementById(
-    "product-description"
-).textContent =
-    currentProduct.moTa;
-
-document.getElementById(
-    "product-category"
-).textContent =
-    currentProduct.danhMuc;
-
-document.getElementById(
-    "spec-code"
-).textContent =
-    currentProduct.maSP;
-
-document.getElementById(
-    "spec-category"
-).textContent =
-    currentProduct.danhMuc;
-
-document.getElementById(
-    "spec-stock"
-).textContent =
-    currentProduct.soLuongTon;
-
-
-}
-
-/* ==========================
-QUANTITY
-========================== */
-
-function initQuantity() {
-
-
-const input =
-    document.getElementById(
-        "quantity"
-    );
-
-document
-.getElementById(
-    "minus-btn"
-)
-.addEventListener(
-    "click",
-    () => {
-
-        if (
-            Number(
-                input.value
-            ) > 1
-        ) {
-
-            input.value =
-                Number(
-                    input.value
-                ) - 1;
-
+            return;
         }
 
-    }
-);
+        renderProduct(product);
 
-document
-.getElementById(
-    "plus-btn"
-)
-.addEventListener(
-    "click",
-    () => {
+    } catch (error) {
 
-        input.value =
-            Number(
-                input.value
-            ) + 1;
+        console.error(error);
 
     }
-);
-
 
 }
 
-function getQuantity() {
+function parseCSV(csv) {
 
+    const rows =
+        csv.trim().split("\n");
 
-return Number(
-    document.getElementById(
-        "quantity"
-    ).value
-);
+    const headers =
+        rows[0].split(",");
 
+    return rows.slice(1).map(row => {
 
-}
+        const values =
+            row.split(",");
 
-/* ==========================
-CART
-========================== */
+        const obj = {};
 
-function getCart() {
+        headers.forEach(
+            (header, index) => {
 
+                obj[
+                    header.trim()
+                ] =
+                    values[index]?.trim() ||
+                    "";
 
-return JSON.parse(
-    localStorage.getItem(
-        "cart"
-    )
-) || [];
+            }
+        );
 
-
-}
-
-function saveCart(cart) {
-
-
-localStorage.setItem(
-    "cart",
-    JSON.stringify(cart)
-);
-
-
-}
-
-function addToCart() {
-
-
-const cart =
-    getCart();
-
-const existing =
-    cart.find(
-        item =>
-            item.maSP ===
-            currentProduct.maSP
-    );
-
-if (existing) {
-
-    existing.soLuong +=
-        getQuantity();
-
-}
-else {
-
-    cart.push({
-
-        maSP:
-            currentProduct.maSP,
-
-        tenSP:
-            currentProduct.tenSP,
-
-        gia:
-            currentProduct.gia,
-
-        hinhAnh:
-            currentProduct.hinhAnh,
-
-        soLuong:
-            getQuantity()
+        return obj;
 
     });
 
 }
 
-saveCart(cart);
+function renderProduct(product) {
 
-alert(
-    "Đã thêm vào giỏ hàng"
-);
+    document.getElementById(
+        "breadcrumb-name"
+    ).textContent =
+        product.TenSP;
 
+    document.getElementById(
+        "breadcrumb-cat"
+    ).textContent =
+        product.DanhMuc;
+
+    document.getElementById(
+        "product-title-val"
+    ).textContent =
+        product.TenSP;
+
+    document.getElementById(
+        "product-sku-val"
+    ).textContent =
+        product.MaSP;
+
+    document.getElementById(
+        "product-price-val"
+    ).textContent =
+        Number(product.Gia)
+            .toLocaleString("vi-VN")
+        + " đ";
+
+    document.getElementById(
+        "quick-cat"
+    ).textContent =
+        product.DanhMuc;
+
+    document.getElementById(
+        "quick-status"
+    ).textContent =
+        product.TrangThai;
+
+    document.getElementById(
+        "quick-stock"
+    ).textContent =
+        product.SoLuongTon;
+
+    document.getElementById(
+        "table-sku"
+    ).textContent =
+        product.MaSP;
+
+    document.getElementById(
+        "table-cat"
+    ).textContent =
+        product.DanhMuc;
+
+    document.getElementById(
+        "table-stock"
+    ).textContent =
+        product.SoLuongTon;
+
+    document.getElementById(
+        "table-status"
+    ).textContent =
+        product.TrangThai;
+
+    document.getElementById(
+        "product-full-desc"
+    ).innerHTML =
+        product.MoTaChiTiet;
+
+    setupGallery(product);
+
+    setupQuantity();
+
+    setupTabs();
+
+    document
+    .getElementById(
+        "btn-add-to-cart-trigger"
+    )
+    .addEventListener(
+        "click",
+        () =>
+            addToCart(product)
+    );
+
+    document
+    .getElementById(
+        "btn-buy-now-trigger"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            addToCart(product);
+
+            location.hash =
+                "/thanh-toan";
+
+        }
+    );
 
 }
 
-function buyNow() {
+function setupGallery(product) {
 
+    const images =
+        product.HinhAnh
+            .split("|");
 
-saveCart([
+    const mainImg =
+        document.getElementById(
+            "main-product-img"
+        );
 
-    {
+    mainImg.src =
+        images[0];
 
-        maSP:
-            currentProduct.maSP,
+    const thumbs =
+        document.getElementById(
+            "product-thumbnails"
+        );
 
-        tenSP:
-            currentProduct.tenSP,
+    thumbs.innerHTML = "";
 
-        gia:
-            currentProduct.gia,
+    images.forEach(
+        (image, index) => {
 
-        hinhAnh:
-            currentProduct.hinhAnh,
+            const img =
+                document.createElement(
+                    "img"
+                );
 
-        soLuong:
-            getQuantity()
+            img.src =
+                image.trim();
+
+            if (
+                index === 0
+            ) {
+                img.classList.add(
+                    "active"
+                );
+            }
+
+            img.onclick =
+                function () {
+
+                    mainImg.src =
+                        image.trim();
+
+                    document
+                        .querySelectorAll(
+                            "#product-thumbnails img"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "active"
+                                )
+                        );
+
+                    img.classList.add(
+                        "active"
+                    );
+
+                };
+
+            thumbs.appendChild(
+                img
+            );
+
+        }
+    );
+
+}
+
+function setupQuantity() {
+
+    const minusBtn =
+        document.getElementById(
+            "qty-minus"
+        );
+
+    const plusBtn =
+        document.getElementById(
+            "qty-plus"
+        );
+
+    const qtyInput =
+        document.getElementById(
+            "product-qty"
+        );
+
+    plusBtn.addEventListener(
+        "click",
+        () => {
+
+            qtyInput.value =
+                Number(
+                    qtyInput.value
+                ) + 1;
+
+        }
+    );
+
+    minusBtn.addEventListener(
+        "click",
+        () => {
+
+            const value =
+                Number(
+                    qtyInput.value
+                );
+
+            if (value > 1) {
+
+                qtyInput.value =
+                    value - 1;
+
+            }
+
+        }
+    );
+
+}
+
+function addToCart(product) {
+
+    const qty =
+        Number(
+            document.getElementById(
+                "product-qty"
+            ).value
+        );
+
+    let cart =
+        JSON.parse(
+            localStorage.getItem(
+                "cart"
+            )
+        ) || [];
+
+    const existing =
+        cart.find(
+            item =>
+                item.maSP ===
+                product.MaSP
+        );
+
+    if (existing) {
+
+        existing.soLuong += qty;
+
+    } else {
+
+        cart.push({
+
+            maSP:
+                product.MaSP,
+
+            tenSP:
+                product.TenSP,
+
+            gia:
+                Number(
+                    product.Gia
+                ),
+
+            soLuong:
+                qty,
+
+            hinhAnh:
+                product.HinhAnh
+                    .split("|")[0]
+
+        });
 
     }
 
-]);
-
-location.hash =
-    "/thanh-toan";
-
-
-}
-
-/* ==========================
-RELATED PRODUCTS
-========================== */
-
-function renderRelatedProducts() {
-
-
-const container =
-    document.getElementById(
-        "related-products"
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
     );
 
-if (!container) {
-    return;
-}
-
-const relatedProducts =
-
-    relatedProducts
-
-    .filter(item =>
-
-        item.danhMuc ===
-        currentProduct.danhMuc &&
-
-        item.maSP !==
-        currentProduct.maSP
-
-    )
-
-    .slice(0,4);
-
-container.innerHTML =
-
-    relatedProducts.map(item => `
-
-    <div
-        class="related-card"
-        onclick="location.hash='/chi-tiet-sp?id=${item.maSP}'"
-    >
-
-        <img
-            src="${item.hinhAnh}"
-            alt="${item.tenSP}"
-        >
-
-        <div
-            class="related-content"
-        >
-
-            <div
-                class="related-name"
-            >
-                ${item.tenSP}
-            </div>
-
-            <div
-                class="related-price"
-            >
-                ${formatPrice(item.gia)}
-            </div>
-
-        </div>
-
-    </div>
-
-    `).join("");
-
+    alert(
+        "Đã thêm vào giỏ hàng"
+    );
 
 }
 
-/* ==========================
-BUTTONS
-========================== */
+function setupTabs() {
 
-function initButtons() {
+    const tabs =
+        document.querySelectorAll(
+            ".tab-link"
+        );
 
+    const contents =
+        document.querySelectorAll(
+            ".tab-content"
+        );
 
-document
-.getElementById(
-    "add-cart-btn"
-)
-.addEventListener(
-    "click",
-    addToCart
-);
+    tabs.forEach(tab => {
 
-document
-.getElementById(
-    "buy-now-btn"
-)
-.addEventListener(
-    "click",
-    buyNow
-);
+        tab.addEventListener(
+            "click",
+            () => {
 
+                tabs.forEach(
+                    item =>
+                        item.classList.remove(
+                            "active"
+                        )
+                );
+
+                contents.forEach(
+                    item =>
+                        item.classList.remove(
+                            "active"
+                        )
+                );
+
+                tab.classList.add(
+                    "active"
+                );
+
+                document
+                    .getElementById(
+                        tab.dataset.tab
+                    )
+                    .classList.add(
+                        "active"
+                    );
+
+            }
+        );
+
+    });
 
 }
-
-/* ==========================
-INIT
-========================== */
-
-loadProduct();
+})();

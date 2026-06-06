@@ -1,18 +1,52 @@
-<section class="section">
+<main class="product-page">
 
-    <div class="container">
+    <!-- Banner -->
 
-        <h2 class="section-title">
-            Sản Phẩm
-        </h2>
+    <section class="product-banner">
 
-        <div class="shop-toolbar">
+        <div class="banner-content">
+
+            <h1>Sản Phẩm</h1>
+
+            <p>
+                Nội thất đẹp - Không gian sống lý tưởng
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- Breadcrumb -->
+
+    <section class="breadcrumb">
+
+        <a href="#/trang-chu">
+            Trang chủ
+        </a>
+
+        <span>/</span>
+
+        <span>
+            Sản phẩm
+        </span>
+
+    </section>
+
+    <!-- Bộ lọc -->
+
+    <section class="product-filter">
+
+        <div class="filter-left">
 
             <input
                 type="text"
                 id="searchInput"
-                placeholder="Tìm sản phẩm..."
+                placeholder="Tìm kiếm sản phẩm..."
             >
+
+        </div>
+
+        <div class="filter-right">
 
             <select id="categoryFilter">
 
@@ -22,20 +56,123 @@
 
             </select>
 
+            <select id="priceFilter">
+
+                <option value="">
+                    Tất cả khoảng giá
+                </option>
+
+                <option value="0-2000000">
+                    Dưới 2 triệu
+                </option>
+
+                <option value="2000000-5000000">
+                    2 - 5 triệu
+                </option>
+
+                <option value="5000000-10000000">
+                    5 - 10 triệu
+                </option>
+
+                <option value="10000000+">
+                    Trên 10 triệu
+                </option>
+
+            </select>
+
+            <select id="sortFilter">
+
+                <option value="newest">
+                    Mới nhất
+                </option>
+
+                <option value="priceAsc">
+                    Giá tăng dần
+                </option>
+
+                <option value="priceDesc">
+                    Giá giảm dần
+                </option>
+
+                <option value="nameAsc">
+                    Tên A-Z
+                </option>
+
+                <option value="nameDesc">
+                    Tên Z-A
+                </option>
+
+            </select>
+
+            <button
+                id="resetFilter"
+                class="btn-reset"
+            >
+
+                Xóa bộ lọc
+
+            </button>
+
         </div>
 
-        <div
-            class="product-grid"
-            id="productGrid"
-        >
+    </section>
+
+    <!-- Thông tin kết quả -->
+
+    <section class="product-result">
+
+        <p>
+
+            Hiển thị
+
+            <strong id="productCount">
+                0
+            </strong>
+
+            sản phẩm
+
+        </p>
+
+    </section>
+
+    <!-- Khu vực JS render -->
+
+    <section class="product-wrapper">
+
+        <div id="productContainer">
+
+            <!--
+
+            JS sẽ render:
+
+            PHÒNG KHÁCH
+
+            Product Card
+            Product Card
+            Product Card
+
+            PHÒNG NGỦ
+
+            Product Card
+            Product Card
+
+            ...
+
+            -->
+
         </div>
 
-        <div
-            class="pagination"
-            id="pagination"
-        >
-        </div>
+    </section>
 
-    </div>
+    <!-- Phân trang -->
 
-</section>
+    <section
+        class="pagination-container"
+        id="pagination"
+    >
+
+        <!-- JS render -->
+
+    </section>
+
+</main>

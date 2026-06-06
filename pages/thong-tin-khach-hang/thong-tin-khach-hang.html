@@ -1,0 +1,173 @@
+<main class="customer-page">
+
+    <!-- Tiêu đề -->
+    <section class="customer-header">
+        <div class="customer-header__icon">
+            <i class="fa-regular fa-user"></i>
+        </div>
+
+        <div class="customer-header__content">
+            <h1>Thông Tin Khách Hàng</h1>
+            <p>Quản lý thông tin tài khoản và đơn hàng của bạn</p>
+        </div>
+    </section>
+
+    <div class="customer-layout">
+
+        <!-- Sidebar -->
+        <aside class="customer-sidebar">
+
+            <ul class="customer-menu">
+
+                <li class="active">
+                    <i class="fa-regular fa-user"></i>
+                    <span>Thông tin cá nhân</span>
+                </li>
+
+                <li>
+                    <i class="fa-regular fa-clipboard"></i>
+                    <span>Đơn hàng của tôi</span>
+                </li>
+
+                <li>
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>Sổ địa chỉ</span>
+                </li>
+
+                <li id="menuPassword">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Đổi mật khẩu</span>
+                </li>
+
+                <li>
+                    <i class="fa-regular fa-heart"></i>
+                    <span>Yêu thích</span>
+                </li>
+
+                <li id="logoutCustomerBtn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Đăng xuất</span>
+                </li>
+
+            </ul>
+
+            <div class="support-card">
+                <h3>Cần hỗ trợ?</h3>
+
+                <p>
+                    Đội ngũ iDECOR luôn sẵn sàng
+                    hỗ trợ bạn 24/7
+                </p>
+
+                <button type="button">
+                    <i class="fa-solid fa-phone"></i>
+                    1900 1234
+                </button>
+            </div>
+
+        </aside>
+
+        <!-- Nội dung -->
+        <section class="customer-content">
+
+            <!-- Thông tin cá nhân -->
+            <div class="customer-card">
+
+                <div class="card-header">
+
+                    <h2>Thông tin cá nhân</h2>
+
+                    <button
+                        type="button"
+                        class="btn-outline"
+                        id="editProfileBtn">
+
+                        <i class="fa-solid fa-pen"></i>
+                        Chỉnh sửa thông tin
+
+                    </button>
+
+                </div>
+
+                <div class="profile-wrapper">
+
+                    <div class="profile-avatar">
+
+                        <img
+                            id="userAvatar"
+                            src="../images/default-avatar.png"
+                            alt="Avatar">
+
+                    </div>
+
+                    <div class="profile-info">
+
+                        <div class="info-item">
+                            <span>Họ và tên</span>
+                            <strong id="fullName"></strong>
+                        </div>
+
+                        <div class="info-item">
+                            <span>Tên đăng nhập</span>
+                            <strong id="username"></strong>
+                        </div>
+
+                        <div class="info-item">
+                            <span>Email</span>
+                            <strong id="email"></strong>
+                        </div>
+
+                        <div class="info-item">
+                            <span>Ngày sinh</span>
+                            <strong id="birthday"></strong>
+                        </div>
+
+                        <div class="info-item">
+                            <span>Số điện thoại</span>
+                            <strong id="phone"></strong>
+                        </div>
+
+                        <div class="info-item">
+                            <span>Giới tính</span>
+                            <strong id="gender"></strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Sổ địa chỉ -->
+            <div class="customer-card">
+
+                <div class="card-header">
+
+                    <h2>Sổ địa chỉ</h2>
+
+                    <button
+                        type="button"
+                        class="btn-outline"
+                        id="addAddressBtn">
+
+                        <i class="fa-solid fa-plus"></i>
+                        Thêm địa chỉ mới
+
+                    </button>
+
+                </div>
+
+                <!-- JS render -->
+                <div
+                    class="address-list"
+                    id="addressList">
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>

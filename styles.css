@@ -100,48 +100,64 @@ select{
     gap:32px;
 }
 
-/* ==========================
-   PRODUCT MENU
-========================== */
+/* ==========================================================================
+   PRODUCT MENU (ĐÃ TỐI ƯU: HIỆU ỨNG TRƯỢT MƯỢT MÀ, KHÔNG CHẾT HOVER)
+   ========================================================================== */
 
 .product-menu {
     position: relative;
+    padding-bottom: 15px; /* Vùng đệm kết nối vô hình chống mất trạng thái hover */
+    margin-bottom: -15px; /* Giữ cân bằng dòng chữ trong thanh navbar */
 }
 
 .product-dropdown {
     position: absolute;
-    top: calc(100% + 15px);
+    top: 100%;
     left: 50%;
-    transform: translateX(-50%);
-    min-width: 240px;
+    transform: translateX(-50%) translateY(12px); /* Đẩy nhẹ xuống dưới tạo đà chuyển động */
+    min-width: 220px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    display: none;
+    
+    /* Chuyển đổi trạng thái bằng hiệu ứng phối hợp mượt mà */
+    display: flex;
     flex-direction: column;
     overflow: hidden;
     z-index: 9999;
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
 }
 
+/* Khi đưa chuột vào Product Menu -> Kích hoạt hiển thị */
 .product-menu:hover .product-dropdown {
-    display: flex;
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0); /* Trượt nhẹ lên vị trí chuẩn */
 }
 
 .product-dropdown a {
-    padding: 14px 18px;
+    padding: 14px 20px !important;
     font-size: 14px;
+    color: var(--text) !important;
+    font-weight: 500 !important;
+    text-align: left;
     transition: var(--transition);
-    border-bottom: 1px solid #f2f2f2;
+    border-bottom: 1px solid #f5f4f0;
 }
 
 .product-dropdown a:last-child {
     border-bottom: none;
 }
 
+/* Hiệu ứng di chuột vào từng danh mục con */
 .product-dropdown a:hover {
-    background: #f8f8f8;
-    color: var(--primary);
+    background: #FAF8F5;
+    color: var(--primary) !important;
+    padding-left: 25px !important; /* Đẩy nhẹ chữ sang phải tinh tế */
 }
 
 .navbar a{
@@ -156,7 +172,7 @@ select{
 }
 
 /* ==========================================================================
-   TÍNH NĂNG ĐÃ SỬA: THANH TÌM KIẾM TINH TẾ KHÔNG BỊ XẤU
+   THANH TÌM KIẾM
    ========================================================================== */
 
 .nav-actions{
@@ -171,7 +187,7 @@ select{
     border: 1px solid #E0DCD5;
     background: #FBFBFA;
     padding: 6px 12px;
-    border-radius: 20px; /* Bo tròn mềm mại phong cách tối giản */
+    border-radius: 20px;
     transition: var(--transition);
 }
 
@@ -187,12 +203,12 @@ select{
     outline: none !important;
     font-size: 13px;
     color: var(--text);
-    width: 120px; /* Độ rộng vừa phải thanh lịch */
+    width: 120px;
     transition: width 0.3s ease;
 }
 
 #headerSearchInput:focus {
-    width: 160px; /* Giãn rộng nhẹ nhàng khi nhập liệu */
+    width: 160px;
 }
 
 .search-submit-btn {
@@ -299,11 +315,11 @@ select{
 }
 
 /* ==========================================================================
-   TÁI CẤU TRÚC: CHÂN TRANG (FOOTER THEO LAYOUT ẢNH MẪU CỦA BẠN)
+   FOOTER
    ========================================================================== */
 
 .footer{
-    background: #FAF8F5 !important; /* Màu kem nhạt sang trọng đồng bộ nền ảnh mẫu */
+    background: #FAF8F5 !important;
     color: var(--text) !important;
     border-top: 1px solid var(--border);
     padding: 80px 8% 30px;
@@ -311,12 +327,11 @@ select{
 
 .footer-grid{
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1fr; /* Tỉ lệ phân chia cột chuẩn */
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
     gap: 50px;
     margin-bottom: 40px;
 }
 
-/* Cột Thương hiệu */
 .footer-column.col-brand p {
     margin-top: 16px;
     color: var(--text-light);
@@ -324,7 +339,6 @@ select{
     font-size: 14px;
 }
 
-/* Khối Khách hàng tin tưởng */
 .customer-trust {
     display: flex;
     align-items: center;
@@ -343,8 +357,8 @@ select{
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #FAF8F5;
-    margin-right: -10px; /* Hiệu ứng xếp chồng nghệ thuật */
-    flex-shrink: 0; /* Khắc phục triệt để lỗi ảnh bị bóp méo */
+    margin-right: -10px;
+    flex-shrink: 0;
 }
 
 .trust-text {
@@ -359,7 +373,6 @@ select{
     font-weight: 600;
 }
 
-/* Các cột thông tin */
 .footer-column h4 {
     margin-bottom: 24px;
     color: var(--primary);
@@ -385,14 +398,12 @@ select{
     color: var(--primary);
 }
 
-/* Danh sách liên hệ */
 .contact-list li {
     font-size: 14px;
     color: var(--text-light);
     line-height: 1.6;
 }
 
-/* Đáy Chân Trang */
 .footer-bottom{
     border-top: 1px solid var(--border);
     margin-top: 40px;
@@ -402,9 +413,7 @@ select{
     font-size: 13px;
 }
 
-/* ==========================================================================
-   RESPONSIVE (Tối ưu thiết bị di động)
-   ========================================================================== */
+/* Responsive */
 
 @media (max-width:992px){
     .header{

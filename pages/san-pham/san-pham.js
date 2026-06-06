@@ -1,170 +1,105 @@
-const SAN_PHAM_URL =
-"https://script.google.com/macros/s/AKfycbxigEyl3ZW_MTnoIvLlRrmlNJetunsIrPktedxnHU3DeHVSWwy1kQqj9P0VsAh2lF_V/exec";
+(() => {
+const SP_PATH = "../../assets/data/SanPham_300Dong.csv";
 
-const PRODUCTS_PER_PAGE = 10;
+const PRODUCTS_PER_PAGE = 30;
 
-let productList = [];
+let allProducts = [];
 let filteredProducts = [];
 let currentPage = 1;
 
 /* ==========================
-LOAD PRODUCTS
+ROOM ORDER
+========================== */
+
+const ROOM_ORDER = [
+    "Phòng khách",
+    "Phòng ngủ",
+    "Phòng bếp",
+    "Phòng tắm"
+];
+
+/* ==========================
+LOAD CSV
 ========================== */
 
 async function loadProducts() {
 
+    try {
 
-try {
+        const response = await fetch(SP_PATH);
 
-    const response =
-        await fetch(
-            `${SAN_PHAM_URL}?action=getProducts`
-        );
+        const csvText = await response.text();
 
-    const result =
-        await response.json();
+        allProducts = parseCSV(csvText);
 
-    if (!result.success) {
-        return;
+        filteredProducts = [...allProducts];
+
+        initCategoryFilter();
+
+        setupEvents();
+
+        const categoryMap = {
+            "living-room": "Phòng khách",
+            "bed-room": "Phòng ngủ",
+            "kitchen": "Phòng bếp",
+            "bath-room": "Phòng tắm"
+        };
+
+        const hash = window.location.hash;
+        const categoryMatch = hash.match(/category=([^&]+)/);
+
+        if (categoryMatch) {
+
+            const selectedCategory =
+                categoryMap[categoryMatch[1]];
+
+            if (selectedCategory) {
+
+                document.getElementById(
+                    "categoryFilter"
+                ).value = selectedCategory;
+
+                applyFilters();
+            }
+        }
+        render();
+
+    } catch (error) {
+
+        console.error("Lỗi tải CSV:", error);
+
     }
-
-    productList =
-        result.products || [];
-
-    filteredProducts =
-        [...productList];
-
-    initCategoryFilter();
-
-    setupCategoryFilter();
-
-    setupSearch();
-
-    applyQueryFilter();
-
-    renderProducts();
-
-    renderPagination();
-
-}
-catch (error) {
-
-    console.error(
-        "Load products error:",
-        error
-    );
-
-}
-
 
 }
 
 /* ==========================
-RENDER PRODUCTS
+PARSE CSV
 ========================== */
 
-function renderProducts() {
+function parseCSV(csv) {
 
+    const rows = csv.trim().split("\n");
 
-const grid =
-    document.getElementById(
-        "productGrid"
-    );
+    const headers = rows[0].split(",");
 
-if (!grid) return;
+    return rows.slice(1).map(row => {
 
-const start =
-    (currentPage - 1) *
-    PRODUCTS_PER_PAGE;
+        const values = row.split(",");
 
-const end =
-    start +
-    PRODUCTS_PER_PAGE;
+        const obj = {};
 
-const products =
-    filteredProducts.slice(
-        start,
-        end
-    );
+        headers.forEach((header, index) => {
 
-if (!products.length) {
+            obj[header.trim()] =
+                values[index]?.trim() || "";
 
-    grid.innerHTML = `
-        <div class="empty-products">
-            Không tìm thấy sản phẩm
-        </div>
-    `;
+        });
 
-    return;
+        obj.Gia = Number(obj.Gia) || 0;
 
-}
+        return obj;
 
-grid.innerHTML =
-    products.map(product => `
-
-    <div class="product-card">
-
-        <div
-            class="product-image"
-            onclick="openProduct('${product.maSP}')"
-        >
-
-            <img
-                src="${product.hinhAnh}"
-                alt="${product.tenSP}"
-            >
-
-        </div>
-
-        <div class="product-content">
-
-            <h3
-                class="product-name"
-                onclick="openProduct('${product.maSP}')"
-            >
-                ${product.tenSP}
-            </h3>
-
-            <div class="product-price">
-
-                ${Number(product.gia)
-                    .toLocaleString("vi-VN")}
-                VNĐ
-
-            </div>
-
-            <input
-                type="number"
-                min="1"
-                value="1"
-                class="product-qty"
-                id="qty-${product.maSP}"
-            >
-
-            <div class="product-actions">
-
-                <button
-                    class="btn btn-outline"
-                    onclick="addToCart('${product.maSP}')"
-                >
-                    Giỏ hàng
-                </button>
-
-                <button
-                    class="btn btn-primary"
-                    onclick="buyNow('${product.maSP}')"
-                >
-                    Mua ngay
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    `).join("");
-
+    });
 
 }
 
@@ -174,183 +109,357 @@ CATEGORY FILTER
 
 function initCategoryFilter() {
 
+    const select =
+        document.getElementById(
+            "categoryFilter"
+        );
 
-const select =
-    document.getElementById(
-        "categoryFilter"
-    );
-
-if (!select) return;
-
-const categories =
-    [
+    const categories = [
         ...new Set(
-            productList.map(
-                product =>
-                    product.danhMuc
+            allProducts.map(
+                p => p.DanhMuc
             )
         )
     ];
 
-select.innerHTML =
+    select.innerHTML =
+        '<option value="">Tất cả danh mục</option>';
 
-    `
-    <option value="">
-        Tất cả danh mục
-    </option>
-    `
+    categories.forEach(category => {
 
-    +
+        select.innerHTML += `
+            <option value="${category}">
+                ${category}
+            </option>
+        `;
 
-    categories.map(category => `
-
-        <option value="${category}">
-            ${category}
-        </option>
-
-    `).join("");
-
-
-}
-
-function setupCategoryFilter() {
-
-
-const select =
-    document.getElementById(
-        "categoryFilter"
-    );
-
-if (!select) return;
-
-select.addEventListener(
-    "change",
-    function () {
-
-        const category =
-            this.value;
-
-        if (!category) {
-
-            filteredProducts =
-                [...productList];
-
-        } else {
-
-            filteredProducts =
-                productList.filter(
-                    product =>
-                        product.danhMuc ===
-                        category
-                );
-
-        }
-
-        currentPage = 1;
-
-        renderProducts();
-
-        renderPagination();
-
-    }
-);
-
+    });
 
 }
 
 /* ==========================
-SEARCH
+EVENTS
 ========================== */
 
-function setupSearch() {
+function setupEvents() {
 
+    document
+        .getElementById("searchInput")
+        .addEventListener(
+            "input",
+            applyFilters
+        );
 
-const input =
-    document.getElementById(
-        "searchInput"
-    );
+    document
+        .getElementById("categoryFilter")
+        .addEventListener(
+            "change",
+            applyFilters
+        );
 
-if (!input) return;
+    document
+        .getElementById("priceFilter")
+        .addEventListener(
+            "change",
+            applyFilters
+        );
 
-input.addEventListener(
-    "input",
-    function () {
+    document
+        .getElementById("sortFilter")
+        .addEventListener(
+            "change",
+            applyFilters
+        );
 
-        const keyword =
-            this.value
-                .trim()
-                .toLowerCase();
+    document
+        .getElementById("resetFilter")
+        .addEventListener(
+            "click",
+            resetFilters
+        );
 
-        filteredProducts =
-            productList.filter(
-                product =>
-                    product.tenSP
-                        .toLowerCase()
-                        .includes(
-                            keyword
-                        )
+}
+
+/* ==========================
+FILTER
+========================== */
+
+function applyFilters() {
+
+    const keyword =
+        document
+            .getElementById("searchInput")
+            .value
+            .toLowerCase()
+            .trim();
+
+    const category =
+        document
+            .getElementById("categoryFilter")
+            .value;
+
+    const price =
+        document
+            .getElementById("priceFilter")
+            .value;
+
+    filteredProducts =
+        allProducts.filter(product => {
+
+            let valid = true;
+
+            if (keyword) {
+
+                const searchText = `
+                    ${product.TenSP || ""}
+                    ${product.DanhMuc || ""}
+                    ${product.ChatLieu || ""}
+                    ${product.MauSac || ""}
+                `
+                    .toLowerCase();
+
+                valid =
+                    valid &&
+                    searchText.includes(keyword);
+
+            }
+
+            if (category) {
+
+                valid =
+                    valid &&
+                    product.DanhMuc === category;
+
+            }
+
+            if (price) {
+
+                if (price === "0-10000000") {
+
+                    valid =
+                        valid &&
+                        product.Gia < 10000000;
+
+                }
+
+                if (price === "10000000-20000000") {
+
+                    valid =
+                        valid &&
+                        product.Gia >= 10000000 &&
+                        product.Gia < 20000000;
+
+                }
+
+                if (price === "20000000-30000000") {
+
+                    valid =
+                        valid &&
+                        product.Gia >= 20000000 &&
+                        product.Gia < 30000000;
+
+                }
+
+                if (price === "30000000+") {
+
+                    valid =
+                        valid &&
+                        product.Gia >= 30000000;
+
+                }
+
+            }
+
+            return valid;
+
+        });
+
+    applySort();
+
+}
+
+/* ==========================
+SORT
+========================== */
+
+function applySort() {
+
+    const sort =
+        document
+            .getElementById("sortFilter")
+            .value;
+
+    switch (sort) {
+
+        case "priceAsc":
+
+            filteredProducts.sort(
+                (a, b) =>
+                    a.Gia - b.Gia
             );
 
-        currentPage = 1;
+            break;
 
-        renderProducts();
+        case "priceDesc":
 
-        renderPagination();
+            filteredProducts.sort(
+                (a, b) =>
+                    b.Gia - a.Gia
+            );
+
+            break;
+
+        case "nameAsc":
+
+            filteredProducts.sort(
+                (a, b) =>
+                    a.TenSP.localeCompare(
+                        b.TenSP,
+                        "vi"
+                    )
+            );
+
+            break;
+
+        case "nameDesc":
+
+            filteredProducts.sort(
+                (a, b) =>
+                    b.TenSP.localeCompare(
+                        a.TenSP,
+                        "vi"
+                    )
+            );
+
+            break;
 
     }
-);
 
+    currentPage = 1;
+
+    render();
 
 }
 
 /* ==========================
-URL CATEGORY
+RENDER
 ========================== */
 
-function applyQueryFilter() {
+function render() {
 
+    renderCount();
 
-const hash =
-    window.location.hash;
+    renderProducts();
 
-const query =
-    hash.split("?")[1];
+    renderPagination();
 
-if (!query) {
-    return;
 }
 
-const params =
-    new URLSearchParams(
-        query
-    );
+/* ==========================
+PRODUCTS
+========================== */
 
-const category =
-    params.get(
-        "category"
-    );
+function renderProducts() {
 
-if (!category) {
-    return;
+    const container =
+        document.getElementById(
+            "productContainer"
+        );
+
+    const start =
+        (currentPage - 1) *
+        PRODUCTS_PER_PAGE;
+
+    const end =
+        start +
+        PRODUCTS_PER_PAGE;
+
+    const products =
+        filteredProducts.slice(
+            start,
+            end
+        );
+
+    container.innerHTML = `
+        <div class="product-grid">
+
+        ${products.map(product => {
+
+            const imageUrl =
+                product.HinhAnh
+                    ? product.HinhAnh
+                        .split("|")[0]
+                        .trim()
+                    : "";
+
+            return `
+
+<div
+    class="product-card"
+    onclick="openProductDetail('${product.MaSP}')"
+>
+
+    <div class="product-image">
+
+        <img
+            src="${imageUrl}"
+            alt="${product.TenSP}"
+            loading="lazy"
+        >
+
+    </div>
+
+    <div class="product-content">
+
+        <h3 class="product-name">
+            ${product.TenSP}
+        </h3>
+
+        <div class="product-price">
+            ${product.Gia.toLocaleString("vi-VN")} đ
+        </div>
+
+        <div class="product-actions">
+
+            <button
+                class="btn-cart"
+                onclick="event.stopPropagation(); addToCartById('${product.MaSP}')"
+            >
+                Giỏ hàng
+            </button>
+
+            <button
+                class="btn-buy"
+                onclick="event.stopPropagation(); buyNowById('${product.MaSP}')"
+            >
+                Mua ngay
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+            `;
+
+        }).join("")}
+
+        </div>
+    `;
+
 }
 
-filteredProducts =
-    productList.filter(
-        product =>
-            product.danhMuc ===
-            category
-    );
+/* ==========================
+COUNT
+========================== */
 
-const select =
+function renderCount() {
+
     document.getElementById(
-        "categoryFilter"
-    );
-
-if (select) {
-    select.value =
-        category;
-}
-
+        "productCount"
+    ).textContent =
+        filteredProducts.length;
 
 }
 
@@ -360,78 +469,46 @@ PAGINATION
 
 function renderPagination() {
 
+    const container =
+        document.getElementById(
+            "pagination"
+        );
 
-const container =
-    document.getElementById(
-        "pagination"
-    );
+    const totalPages =
+        Math.ceil(
+            filteredProducts.length /
+            PRODUCTS_PER_PAGE
+        );
 
-if (!container) return;
+    let html = "";
 
-const totalPages =
-    Math.ceil(
-        filteredProducts.length /
-        PRODUCTS_PER_PAGE
-    );
+    for (let i = 1; i <= totalPages; i++) {
 
-container.innerHTML = "";
+        html += `
+        <button
+            class="page-btn ${i === currentPage ? "active" : ""}"
+            onclick="changePage(${i})"
+        >
+            ${i}
+        </button>
+        `;
 
-for (
-    let i = 1;
-    i <= totalPages;
-    i++
-) {
+    }
 
-    container.innerHTML += `
-
-    <button
-        class="page-btn ${
-            i === currentPage
-                ? "active"
-                : ""
-        }"
-        onclick="changePage(${i})"
-    >
-        ${i}
-    </button>
-
-    `;
-
-}
-
+    container.innerHTML = html;
 
 }
 
 function changePage(page) {
 
+    currentPage = page;
 
-currentPage = page;
+    render();
 
-renderProducts();
-
-renderPagination();
-
-window.scrollTo({
-
-    top: 0,
-
-    behavior: "smooth"
-
-});
-
-
-}
-
-/* ==========================
-PRODUCT DETAIL
-========================== */
-
-function openProduct(maSP) {
-
-
-location.hash =
-    `/chi-tiet-sp?id=${maSP}`;
-
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 
 }
 
@@ -439,142 +516,194 @@ location.hash =
 CART
 ========================== */
 
-function getCart() {
+function addToCart(product) {
 
+    const cart =
+        JSON.parse(
+            localStorage.getItem(
+                "cart"
+            )
+        ) || [];
 
-return JSON.parse(
-    localStorage.getItem(
-        "cart"
-    )
-) || [];
+    const existing =
+        cart.find(
+            item =>
+                item.maSP === product.MaSP
+        );
 
+    if (existing) {
 
-}
+        existing.soLuong += 1;
 
-function saveCart(cart) {
+    } else {
 
+        cart.push({
 
-localStorage.setItem(
-    "cart",
-    JSON.stringify(cart)
-);
+            maSP: product.MaSP,
 
+            tenSP: product.TenSP,
 
-}
+            gia: Number(product.Gia),
 
-function addToCart(productId) {
+            hinhAnh:
+                product.HinhAnh
+                    ? product.HinhAnh
+                        .split("|")[0]
+                        .trim()
+                    : "",
 
+            soLuong: 1
 
-const product =
-    productList.find(
-        item =>
-            item.maSP === productId
-    );
+        });
 
-if (!product) {
-    return;
-}
-
-const quantity =
-    Number(
-        document.getElementById(
-            `qty-${productId}`
-        ).value
-    );
-
-const cart =
-    getCart();
-
-const existing =
-    cart.find(
-        item =>
-            item.maSP === productId
-    );
-
-if (existing) {
-
-    existing.soLuong +=
-        quantity;
-
-} else {
-
-    cart.push({
-
-        maSP:
-            product.maSP,
-
-        tenSP:
-            product.tenSP,
-
-        gia:
-            product.gia,
-
-        hinhAnh:
-            product.hinhAnh,
-
-        soLuong:
-            quantity
-
-    });
-
-}
-
-saveCart(cart);
-
-alert(
-    "Đã thêm vào giỏ hàng"
-);
-
-
-}
-
-function buyNow(productId) {
-
-
-const product =
-    productList.find(
-        item =>
-            item.maSP === productId
-    );
-
-if (!product) {
-    return;
-}
-
-const quantity =
-    Number(
-        document.getElementById(
-            `qty-${productId}`
-        ).value
-    );
-
-saveCart([
-    {
-        maSP:
-            product.maSP,
-
-        tenSP:
-            product.tenSP,
-
-        gia:
-            product.gia,
-
-        hinhAnh:
-            product.hinhAnh,
-
-        soLuong:
-            quantity
     }
-]);
 
-location.hash =
-    "/thanh-toan";
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+    
+    updateCartBadge();
 
+    alert("Đã thêm vào giỏ hàng");
 
 }
 
+function addToCartById(id) {
+
+    const product =
+        allProducts.find(
+            p => p.MaSP === id
+        );
+
+    if (product) {
+
+        addToCart(product);
+
+    }
+
+}
+
+/* ==========================
+BUY NOW
+========================== */
+
+function buyNow(product) {
+
+    addToCart(product);
+
+    location.hash = "#/gio-hang";
+
+}
+
+function buyNowById(id) {
+
+    const product =
+        allProducts.find(
+            p => p.MaSP === id
+        );
+
+    if (product) {
+
+        buyNow(product);
+
+    }
+
+}
+
+/* ==========================
+RESET
+========================== */
+
+function resetFilters() {
+
+    document.getElementById(
+        "searchInput"
+    ).value = "";
+
+    document.getElementById(
+        "categoryFilter"
+    ).value = "";
+
+    document.getElementById(
+        "priceFilter"
+    ).value = "";
+
+    document.getElementById(
+        "sortFilter"
+    ).value = "";
+
+    filteredProducts =
+        [...allProducts];
+
+    currentPage = 1;
+
+    render();
+
+}
+
+function openProductDetail(productId) {
+
+    localStorage.setItem(
+        "selectedProductId",
+        productId
+    );
+
+    window.location.hash =
+        "#/chi-tiet-sp";
+
+}
+
+function updateCartBadge() {
+
+    const badge =
+        document.querySelector(
+            ".cart-count"
+        );
+
+    if (!badge) return;
+
+    const cart =
+        JSON.parse(
+            localStorage.getItem(
+                "cart"
+            )
+        ) || [];
+
+    const count =
+        cart.reduce(
+
+            (total, item) =>
+
+                total +
+                item.soLuong,
+
+            0
+
+        );
+
+    badge.textContent =
+        count;
+
+}
+
+
+window.openProductDetail =
+    openProductDetail;
+
+window.buyNowById =
+    buyNowById;
+
+window.addToCartById =
+    addToCartById;
+
+window.changePage =
+    changePage;
+    
 /* ==========================
 INIT
 ========================== */
 
 loadProducts();
+
+})();

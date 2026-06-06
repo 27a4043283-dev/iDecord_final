@@ -1,502 +1,768 @@
+(() => {
+
+/* ==========================
+   KIỂM TRA ĐĂNG NHẬP
+========================== */
+
+const currentUser =
+    JSON.parse(
+        localStorage.getItem(
+            "currentUser"
+        )
+    );
+
+if (!currentUser) {
+
+    alert(
+        "Vui lòng đăng nhập để thanh toán"
+    );
+
+    location.hash =
+        "#/dang-nhap";
+
+    return;
+}
+
 /* ==========================
    CONFIG
 ========================== */
 
-const API_URL =
-"https://script.google.com/macros/s/AKfycbxigEyl3ZW_MTnoIvLlRrmlNJetunsIrPktedxnHU3DeHVSWwy1kQqj9P0VsAh2lF_V/exec";
+const BANK_CODE =
+    "970432";
 
-const BANK_CODE = "VPBANK";
-const ACCOUNT_NO = "0395376628";
-const ACCOUNT_NAME = "iDECOR";
+const ACCOUNT_NO =
+    "0395376628";
+
+const ACCOUNT_NAME =
+    "iDECOR";
 
 /* ==========================
-   DATA
+   GIỎ HÀNG
 ========================== */
 
-let cart =
-JSON.parse(
-localStorage.getItem("cart")
-) || [];
+const cart =
+    JSON.parse(
+        localStorage.getItem(
+            "cart"
+        )
+    ) || [];
 
-let currentOrderId = null;
+if (cart.length === 0) {
 
-let qrRefreshCount = 0;
+    alert(
+        "Giỏ hàng đang trống"
+    );
 
-let timerInterval = null;
+    location.hash =
+        "#/gio-hang";
+
+    return;
+}
 
 /* ==========================
    FORMAT
 ========================== */
 
-function formatMoney(value){
+function formatMoney(value) {
 
     return Number(value)
-    .toLocaleString("vi-VN")
-    + " VNĐ";
-
-}
-
-/* ==========================
-   RENDER CART
-========================== */
-
-function renderCart(){
-
-    const container =
-    document.getElementById(
-    "checkout-products"
-    );
-
-    if(!container) return;
-
-    let subtotal = 0;
-
-    container.innerHTML = "";
-
-    cart.forEach(item=>{
-
-        const total =
-        item.gia *
-        item.soLuong;
-
-        subtotal += total;
-
-        container.innerHTML += `
-
-        <div class="product-item">
-
-            <div class="product-image">
-
-                <img
-                src="${item.hinhAnh}"
-                alt="${item.tenSP}"
-                style="
-                    width:100%;
-                    height:100%;
-                    object-fit:cover;
-                ">
-
-            </div>
-
-            <div class="product-info">
-
-                <h3>${item.tenSP}</h3>
-
-                <p>
-                    Số lượng:
-                    ${item.soLuong}
-                </p>
-
-                <p>
-                    Đơn giá:
-                    ${formatMoney(item.gia)}
-                </p>
-
-                <p class="product-price">
-                    ${formatMoney(total)}
-                </p>
-
-            </div>
-
-        </div>
-
-        `;
-
-    });
-
-    const shipping = 50000;
-
-    const grandTotal =
-    subtotal + shipping;
-
-    document.getElementById(
-    "subtotal"
-    ).textContent =
-    formatMoney(subtotal);
-
-    document.getElementById(
-    "shipping-fee"
-    ).textContent =
-    formatMoney(shipping);
-
-    document.getElementById(
-    "grand-total"
-    ).textContent =
-    formatMoney(grandTotal);
-
+        .toLocaleString(
+            "vi-VN"
+        ) + " VNĐ";
 }
 
 /* ==========================
    TỔNG TIỀN
 ========================== */
 
-function getTotalAmount(){
+function getSubtotal() {
 
-    const subtotal =
-    cart.reduce(
-        (sum,item)=>
+    return cart.reduce(
 
-        sum +
-        item.gia *
-        item.soLuong,
+        (sum, item) =>
+
+            sum +
+            (
+                item.gia *
+                item.soLuong
+            ),
 
         0
+
     );
+}
 
-    return subtotal + 50000;
+function getShippingFee() {
 
+    return 50000;
+}
+
+function getGrandTotal() {
+
+    return (
+        getSubtotal() +
+        getShippingFee()
+    );
 }
 
 /* ==========================
-   VALIDATE
+   ĐƠN HÀNG
 ========================== */
 
-function validateCheckout(){
+function renderOrderSection() {
 
-    const payment =
-    document.querySelector(
-    'input[name="payment"]:checked'
-    );
-
-    if(!payment){
-
-        alert(
-        "Vui lòng chọn phương thức thanh toán"
+    const section =
+        document.getElementById(
+            "order-section"
         );
 
-        return false;
+    if (!section) return;
 
-    }
+    let html = `
+        <h2>
+            Thông Tin Đơn Hàng
+        </h2>
+    `;
 
-    if(
-        payment.value !==
-        "vietqr"
-    ){
+    cart.forEach(item => {
 
-        alert(
-        "Chức năng đang nâng cấp"
-        );
+        html += `
 
-        return false;
+        <div class="product-item">
 
-    }
+            <div class="product-image">
 
-    if(
-        !document.getElementById(
-        "agree-info"
-        ).checked
-    ){
+                <img
+                    src="${item.hinhAnh}"
+                    alt="${item.tenSP}"
+                >
 
-        alert(
-        "Bạn chưa xác nhận thông tin"
-        );
+            </div>
 
-        return false;
+            <div class="product-info">
 
-    }
+                <h3>
+                    ${item.tenSP}
+                </h3>
 
-    if(
-        !document.getElementById(
-        "agree-policy"
-        ).checked
-    ){
+                <p>
+                    Mã SP:
+                    ${item.maSP}
+                </p>
 
-        alert(
-        "Bạn chưa đồng ý chính sách"
-        );
+                <p>
+                    Số lượng:
+                    ${item.soLuong}
+                </p>
 
-        return false;
+                <div class="product-price">
 
-    }
+                    ${formatMoney(
+                        item.gia *
+                        item.soLuong
+                    )}
 
-    return true;
+                </div>
 
+            </div>
+
+        </div>
+
+        `;
+    });
+
+    section.innerHTML =
+        html;
 }
 
 /* ==========================
-   TẠO ĐƠN HÀNG
+   NHẬN HÀNG
 ========================== */
 
-async function createOrder(){
+function renderShippingSection() {
 
-    const currentUser =
-        JSON.parse(
-            localStorage.getItem(
-                "currentUser"
-            )
+    const section =
+        document.getElementById(
+            "shipping-section"
         );
 
-    const data = {
+    if (!section) return;
 
-        action:
-            "createOrder",
+    section.innerHTML = `
 
-        sessionId:
-            currentUser?.id || "guest",
+        <h2>
+            Thông Tin Nhận Hàng
+        </h2>
 
-        hoTen:
-            document.getElementById(
-                "customer-name"
-            ).value,
+        <div class="shipping-form">
 
-        sdt:
-            document.getElementById(
-                "customer-phone"
-            ).value,
+            <input
+                id="customer-name"
+                value="${currentUser.fullName || ""}"
+                placeholder="Họ và tên"
+            >
 
-        email:
-            document.getElementById(
-                "customer-email"
-            ).value,
+            <input
+                id="customer-phone"
+                value="${currentUser.phone || ""}"
+                placeholder="Số điện thoại"
+            >
 
-        diaChi:
-            document.getElementById(
-                "address-detail"
-            ).value,
+            <input
+                id="customer-email"
+                value="${currentUser.email || ""}"
+                placeholder="Email"
+                readonly
+            >
 
-        tongDon:
-            getTotalAmount(),
+            <input
+                id="address-detail"
+                placeholder="Địa chỉ nhận hàng"
+            >
 
-        products:
-            cart
+        </div>
 
-    };
-
-    const response =
-    await fetch(
-        API_URL,
-        {
-            method:"POST",
-            body:JSON.stringify(
-                data
-            )
-        }
-    );
-
-    const result =
-    await response.json();
-
-    if(
-        !result.success
-    ){
-
-        throw new Error(
-        result.message
-        );
-
-    }
-
-    return result.maDH;
-
-}
-
-/* ==========================
-   TẠO THANH TOÁN
-========================== */
-
-async function createPayment(
-    maDH
-){
-
-    const response =
-    await fetch(
-        API_URL,
-        {
-            method:"POST",
-
-            body:JSON.stringify({
-
-                action:
-                "createPayment",
-
-                maDH,
-
-                soTien:
-                getTotalAmount()
-
-            })
-
-        }
-    );
-
-    return await response.json();
-
-}
-
-/* ==========================
-   TẠO QR
-========================== */
-
-function generateQR(
-    maDH
-){
-
-    const qrImage =
-    document.getElementById(
-    "qr-image"
-    );
-
-    const amount =
-    getTotalAmount();
-
-    qrImage.src =
-
-`https://img.vietqr.io/image/${BANK_CODE}-${ACCOUNT_NO}-compact2.png?amount=${amount}&addInfo=${maDH}&accountName=${ACCOUNT_NAME}`;
-
-    document
-    .getElementById(
-    "qr-payment"
-    )
-    .classList
-    .add(
-    "active"
-    );
-
-}
-
-/* ==========================
-   TIMER
-========================== */
-
-function startTimer(){
-
-    clearInterval(
-    timerInterval
-    );
-
-    let seconds = 600;
-
-    timerInterval =
-    setInterval(()=>{
-
-        const min =
-        Math.floor(
-        seconds / 60
-        );
-
-        const sec =
-        seconds % 60;
-
-        document.querySelector(
-        ".qr-timer"
-        ).textContent =
-
-        `${String(min).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
-
-        seconds--;
-
-        if(
-            seconds < 0
-        ){
-
-            clearInterval(
-            timerInterval
-            );
-
-            refreshQR();
-
-        }
-
-    },1000);
-
-}
-
-/* ==========================
-   REFRESH QR
-========================== */
-
-async function refreshQR(){
-
-    qrRefreshCount++;
-
-    if(
-        qrRefreshCount >= 3
-    ){
-
-        alert(
-        "Phiên thanh toán đã hết hạn"
-        );
-
-        localStorage.removeItem(
-        "cart"
-        );
-
-        location.hash =
-        "/gio-hang";
-
-        return;
-
-    }
-
-    generateQR(
-        currentOrderId
-    );
-
-    startTimer();
-
+    `;
 }
 
 /* ==========================
    THANH TOÁN
 ========================== */
 
-async function checkout(){
+/* ==========================
+PAYMENT METHODS
+========================== */
 
-    try{
+function renderPaymentSection() {
 
-        if(
-            !validateCheckout()
-        ) return;
-
-        const maDH =
-        await createOrder();
-
-        currentOrderId =
-        maDH;
-
-        await createPayment(
-            maDH
+    const section =
+        document.getElementById(
+            "payment-section"
         );
 
-        generateQR(
-            maDH
+    if (!section) return;
+
+    section.innerHTML = `
+
+        <h2>
+            Phương Thức Thanh Toán
+        </h2>
+
+        <div class="payment-method">
+
+            <label class="payment-card">
+
+                <input
+                    type="radio"
+                    name="payment"
+                    value="vietqr"
+                >
+
+                <div>
+
+                    <strong>
+                        Thanh toán qua mã QR
+                    </strong>
+
+                    <p>
+                        Quét mã QR bằng ứng dụng ngân hàng
+                    </p>
+
+                </div>
+
+            </label>
+
+            <label class="payment-card">
+
+                <input
+                    type="radio"
+                    name="payment"
+                    value="momo"
+                >
+
+                <div>
+
+                    <strong>
+                        Thanh toán bằng ví điện tử MoMo
+                    </strong>
+
+                    <p>
+                        Thanh toán bằng ứng dụng MoMo
+                    </p>
+
+                </div>
+
+            </label>
+
+            <label class="payment-card">
+
+                <input
+                    type="radio"
+                    name="payment"
+                    value="card"
+                >
+
+                <div>
+
+                    <strong>
+                        Thanh toán bằng thẻ ngân hàng
+                    </strong>
+
+                    <p>
+                        Chức năng đang cập nhật
+                    </p>
+
+                </div>
+
+            </label>
+
+            <label class="payment-card">
+
+                <input
+                    type="radio"
+                    name="payment"
+                    value="cod"
+                >
+
+                <div>
+
+                    <strong>
+                        Thanh toán khi nhận hàng
+                    </strong>
+
+                    <p>
+                        Thanh toán sau khi nhận sản phẩm
+                    </p>
+
+                </div>
+
+            </label>
+
+        </div>
+    `;
+}
+
+function handlePaymentMethod() {
+
+    document.addEventListener(
+        "change",
+        e => {
+
+            if (
+                e.target.name !==
+                "payment"
+            ) return;
+
+            const method =
+                e.target.value;
+
+            const extra =
+                document.getElementById(
+                    "payment-extra-section"
+                );
+
+            if (!extra) return;
+
+            switch(method){
+
+                case "vietqr":
+
+                    extra.classList.add(
+                        "active"
+                    );
+
+                    extra.innerHTML = `
+                        <div class="payment-extra">
+
+                            <div class="qr-box">
+
+                                <img
+                                    src="${buildVietQrUrl()}"
+                                >
+
+                            </div>
+
+                            <div class="bank-info">
+
+                                <p>
+                                    Ngân hàng:
+                                    VPBank
+                                </p>
+
+                                <p>
+                                    STK:
+                                    0395376628
+                                </p>
+
+                                <p>
+                                    Chủ TK:
+                                    iDECOR
+                                </p>
+
+                            </div>
+
+                            <button
+                                id="confirm-qr-btn"
+                                class="confirm-order-btn"
+                            >
+                                Tôi Đã Thanh Toán
+                            </button>
+
+                        </div>
+                    `;
+
+                    document
+                        .getElementById(
+                            "confirm-qr-btn"
+                        )
+                        ?.addEventListener(
+                            "click",
+                            checkout
+                        );
+                        
+                    break;
+
+                case "momo":
+
+                    alert(
+                        "Chức năng thanh toán MoMo đang được cập nhật"
+                    );
+
+                    e.target.checked = false;
+
+                    extra.classList.remove(
+                        "active"
+                    );
+
+                    extra.innerHTML = "";
+
+                    break;
+
+                case "card":
+
+                    alert(
+                        "Chức năng đang cập nhật"
+                    );
+
+                    e.target.checked = false;
+
+                    extra.classList.remove(
+                        "active"
+                    );
+
+                    extra.innerHTML = "";
+
+                    break;
+
+                case "cod":
+
+                    extra.classList.add(
+                        "active"
+                    );
+
+                    extra.innerHTML = `
+
+                        <div class="info-box">
+
+                            <h4>
+                                Thanh toán khi nhận hàng
+                            </h4>
+
+                            <p>
+                                Quý khách sẽ thanh toán cho nhân viên giao hàng sau khi nhận sản phẩm.
+                            </p>
+
+                        </div>
+
+                        <button
+                            id="confirm-order-btn"
+                            class="confirm-order-btn"
+                        >
+                            Xác Nhận Đơn Hàng
+                        </button>
+
+                    `;
+
+                    document
+                        .getElementById(
+                            "confirm-order-btn"
+                        )
+                        ?.addEventListener(
+                            "click",
+                            checkout
+                        );
+
+                    break;
+            }
+
+        }
+    );
+}
+
+
+
+/* ==========================
+   TÓM TẮT
+========================== */
+
+function renderSummarySection() {
+
+    const section =
+        document.getElementById(
+            "summary-section"
         );
 
-        startTimer();
+    if (!section) return;
 
-        alert(
-        "Đơn hàng đã được tạo"
-        );
+    section.innerHTML = `
 
-    }
-    catch(error){
+        <h2>
+            Tóm Tắt Đơn Hàng
+        </h2>
 
-        console.error(
-        error
-        );
+        <div class="summary-box">
 
-        alert(
-        error.message
-        );
+            <div class="summary-row">
 
-    }
+                <span>
+                    Tạm tính
+                </span>
 
+                <span>
+                    ${formatMoney(
+                        getSubtotal()
+                    )}
+                </span>
+
+            </div>
+
+            <div class="summary-row">
+
+                <span>
+                    Phí vận chuyển
+                </span>
+
+                <span>
+                    ${formatMoney(
+                        getShippingFee()
+                    )}
+                </span>
+
+            </div>
+
+            <div class="summary-total">
+
+                <span>
+                    Tổng cộng
+                </span>
+
+                <br>
+
+                <strong>
+
+                    ${formatMoney(
+                        getGrandTotal()
+                    )}
+
+                </strong>
+
+            </div>
+        </div>
+
+    `;
 }
 
 /* ==========================
-   BUTTON
+   TẠO ĐƠN
 ========================== */
 
-const button =
-    document.getElementById(
-        "generate-qr-btn"
+function createOrder() {
+
+    const paymentMethod =
+        document.querySelector(
+            'input[name="payment"]:checked'
+        )?.value;
+    
+            const status =
+            paymentMethod === "cod"
+                ? "Cho xac nhan"
+                : "Cho thanh toan";
+
+
+    const order = {
+
+        id:
+            "DH" +
+            Date.now(),
+
+        customer: {
+
+            fullName:
+                document.getElementById(
+                    "customer-name"
+                ).value,
+
+            phone:
+                document.getElementById(
+                    "customer-phone"
+                ).value,
+
+            email:
+                document.getElementById(
+                    "customer-email"
+                ).value,
+
+            address:
+                document.getElementById(
+                    "address-detail"
+                ).value
+
+        },
+
+        products:
+            cart,
+
+        total:
+            getGrandTotal(),
+
+        paymentMethod,
+
+        status,
+
+        createdAt:
+            new Date()
+            .toLocaleString(
+                "vi-VN"
+            )
+
+    };
+
+    const orders =
+        JSON.parse(
+            localStorage.getItem(
+                "orders"
+            )
+        ) || [];
+
+    orders.push(order);
+
+    localStorage.setItem(
+
+        "orders",
+
+        JSON.stringify(
+            orders
+        )
+
     );
 
-if (button) {
-    button.addEventListener(
-        "click",
-        checkout
-    );
+    return order;
 }
 
-renderCart();
+/* ==========================
+   CHECKOUT
+========================== */
+
+function checkout() {
+
+    const address =
+        document.getElementById(
+            "address-detail"
+        ).value.trim();
+
+    if (!address) {
+
+        alert(
+            "Vui lòng nhập địa chỉ nhận hàng"
+        );
+
+        return;
+    }
+
+    const fullName =
+    document
+        .getElementById(
+            "customer-name"
+        )
+        .value
+        .trim();
+
+    const phone =
+        document
+            .getElementById(
+                "customer-phone"
+            )
+            .value
+            .trim();
+
+    if (!fullName) {
+
+        alert(
+            "Vui lòng nhập họ tên"
+        );
+
+        return;
+    }
+
+    if (!phone) {
+
+        alert(
+            "Vui lòng nhập số điện thoại"
+        );
+
+        return;
+    }
+
+    const paymentMethod =
+    document.querySelector(
+        'input[name="payment"]:checked'
+    )?.value;
+
+    if (!paymentMethod) {
+
+        alert(
+            "Vui lòng chọn phương thức thanh toán"
+        );
+
+        return;
+    }
+
+    const order =
+        createOrder();
+
+    alert(
+        "Đặt hàng thành công"
+    );
+
+    localStorage.removeItem(
+        "cart"
+    );
+
+    location.hash =
+        "#/hoan-tat";
+}
+
+function buildVietQrUrl() {
+
+    const orderId =
+        "DH" + Date.now();
+
+    return `https://img.vietqr.io/image/${BANK_CODE}-${ACCOUNT_NO}-compact2.png?amount=${getGrandTotal()}&addInfo=${orderId}&accountName=${encodeURIComponent(ACCOUNT_NAME)}`;
+}
+
+/* ==========================
+   INIT
+========================== */
+
+renderOrderSection();
+
+renderShippingSection();
+
+renderPaymentSection();
+
+renderSummarySection();
+
+handlePaymentMethod();
+
+})();
+

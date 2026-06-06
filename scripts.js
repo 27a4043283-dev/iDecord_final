@@ -15,6 +15,7 @@ const routes = {
     "/doi-mat-khau": "doi-mat-khau",
     "/thanh-toan": "thanh-toan",
     "/dieu-khoan": "dieu-khoan",
+    "/thong-tin-khach-hang": "thong-tin-khach-hang",
 };
 
 /* Biến toàn cục */
@@ -24,27 +25,19 @@ CONFIG HỆ THỐNG
 ========================== */
 
 window.IDECOR = {
-
     API_URL:
         "https://script.google.com/macros/s/AKfycbxigEyl3ZW_MTnoIvLlRrmlNJetunsIrPktedxnHU3DeHVSWwy1kQqj9P0VsAh2lF_V/exec",
-
     products: [],
-
     categories: [],
-
     cart: [],
-
     currentUser: null
-
 };
 
 /* Router assets */
-
 let currentCss = null;
 let currentJs = null;
 
 /* Lấy route hiện tại */
-
 function getCurrentPath() {
     const hash = window.location.hash;
 
@@ -52,16 +45,18 @@ function getCurrentPath() {
         return "/trang-chu";
     }
 
-    const path = hash.replace("#", "");
+    const path = hash
+        .replace("#", "")
+        .split("?")[0];
 
-    return routes[path] ? path : "/trang-chu";
+    return routes[path]
+        ? path
+        : "/trang-chu";
 }
 
 /* Tải trang */
-
 async function loadPage(path) {
     const page = routes[path];
-
     if (!page) {
         window.location.hash = "/trang-chu";
         return;
@@ -72,7 +67,6 @@ async function loadPage(path) {
     let jsPath;
 
     /* Các trang tài khoản */
-
     const accountPages = [
         "dang-nhap",
         "dang-ky",
@@ -92,20 +86,17 @@ async function loadPage(path) {
 
     try {
         const response = await fetch(htmlPath);
-
         if (!response.ok) {
             throw new Error("Không tìm thấy trang");
         }
 
         const html = await response.text();
-
         const mainContent = document.getElementById("main-content");
 
         removeAssets();
-
         mainContent.innerHTML = html;
-
         updateAccountMenu();
+        updateCartBadge();
 
         injectCss(cssPath);
         injectJs(jsPath);
@@ -113,7 +104,6 @@ async function loadPage(path) {
         updateActiveLink(path);
     } catch (error) {
         console.error(error);
-
         document.getElementById("main-content").innerHTML = `
             <section class="section">
                 <div class="container">
@@ -126,13 +116,11 @@ async function loadPage(path) {
 }
 
 /* Xóa CSS JS cũ */
-
 function removeAssets() {
     if (currentCss) {
         currentCss.remove();
         currentCss = null;
     }
-
     if (currentJs) {
         currentJs.remove();
         currentJs = null;
@@ -140,69 +128,42 @@ function removeAssets() {
 }
 
 /* Nạp CSS */
-
 function injectCss(path) {
     const link = document.createElement("link");
-
     link.rel = "stylesheet";
     link.href = path;
-
     document.head.appendChild(link);
-
     currentCss = link;
 }
 
 /* Nạp JS */
-
 function injectJs(path) {
-
     if (currentJs) {
-
         currentJs.remove();
-
         currentJs = null;
-
     }
 
-    const oldScript =
-        document.getElementById(
-            "page-script"
-        );
-
+    const oldScript = document.getElementById("page-script");
     if (oldScript) {
         oldScript.remove();
     }
 
-    const script =
-        document.createElement(
-            "script"
-        );
-
-    script.id =
-        "page-script";
-
-    script.src =
-        `${path}?t=${Date.now()}`;
-
-    document.body.appendChild(
-        script
-    );
-
-    currentJs =
-        script;
-
+    const script = document.createElement("script");
+    script.id = "page-script";
+    script.src = `${path}?t=${Date.now()}`;
+    document.body.appendChild(script);
+    currentJs = script;
 }
 
 /* Active menu */
-
 function updateActiveLink(path) {
     const links = document.querySelectorAll(".navbar a");
-
     links.forEach((link) => {
+        // Tránh gỡ bỏ thuộc tính active của trang cha khi hover vào các mục con
+        if (link.closest('.product-dropdown')) return;
+        
         link.classList.remove("active");
-
         const href = link.getAttribute("href");
-
         if (href === `#${path}`) {
             link.classList.add("active");
         }
@@ -210,36 +171,25 @@ function updateActiveLink(path) {
 }
 
 /* Theo dõi thay đổi hash */
-
 window.addEventListener("hashchange", () => {
     loadPage(getCurrentPath());
 });
 
 /* Khởi tạo */
-
 window.addEventListener("DOMContentLoaded", () => {
     loadPage(getCurrentPath());
-
     updateAccountMenu();
-
+    updateCartBadge();
     loadProducts();
 
     const hash = window.location.hash;
-
     if (hash && hash.startsWith("#section-")) {
         setTimeout(() => {
             const element = document.querySelector(hash);
-
             if (element) {
                 const headerOffset = 90;
-
-                const elementPosition =
-                    element.getBoundingClientRect().top;
-
-                const offsetPosition =
-                    elementPosition +
-                    window.pageYOffset -
-                    headerOffset;
+                const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
                 window.scrollTo({
                     top: offsetPosition,
@@ -251,123 +201,107 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 /* Cập nhật menu tài khoản */
-
 function updateAccountMenu() {
-    const accountLink =
-        document.getElementById("accountLink");
-
-    const dropdown =
-        document.getElementById("accountDropdown");
-
-    const logoutBtn =
-        document.getElementById("logoutBtn");
+    const accountLink = document.getElementById("accountLink");
+    const dropdown = document.getElementById("accountDropdown");
+    const logoutBtn = document.getElementById("logoutBtn");
 
     if (!accountLink) return;
 
-    const currentUser = JSON.parse(
-        localStorage.getItem("currentUser")
-    );
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
     if (!currentUser) {
         accountLink.textContent = "Tài Khoản";
         accountLink.href = "#/dang-nhap";
-
         if (dropdown) {
             dropdown.style.display = "none";
         }
-
         return;
     }
 
-    accountLink.textContent =
-        currentUser.fullName;
-
+    accountLink.textContent = currentUser.fullName;
     accountLink.href = "#";
 
     if (logoutBtn) {
         logoutBtn.onclick = function () {
             localStorage.removeItem("currentUser");
-
             window.location.hash = "/dang-nhap";
-
             location.reload();
         };
     }
 }
 
 async function loadProducts() {
-
     try {
+        const response = await fetch(`${IDECOR.API_URL}?action=getProducts`);
+        const result = await response.json();
 
-        const response =
-            await fetch(
-                `${IDECOR.API_URL}?action=getProducts`
-            );
-
-        const result =
-            await response.json();
-
-        if (
-            !result.success
-        ) {
+        if (!result.success) {
             return;
         }
 
-        IDECOR.products =
-            result.products || [];
-
+        IDECOR.products = result.products || [];
         renderCategoryMenu();
-
+    } catch (error) {
+        console.error("Load products error:", error);
     }
-    catch (error) {
-
-        console.error(
-            "Load products error:",
-            error
-        );
-
-    }
-
 }
 
 function renderCategoryMenu() {
+    const dropdown = document.getElementById("productDropdown");
+    if (!dropdown) return;
 
-    const dropdown =
-        document.getElementById(
-            "productDropdown"
-        );
-
-    if (!dropdown) {
+    // CHẶN GHI ĐÈ: Nếu đã tự cấu trúc danh mục cứng ở HTML, dừng hàm tại đây
+    if (dropdown.children.length > 0) {
         return;
     }
 
     const categories = [
-
         ...new Set(
-
             IDECOR.products
-                .map(
-                    product =>
-                    product.danhMuc
-                )
+                .map(product => product.danhMuc)
                 .filter(Boolean)
-
         )
-
     ];
 
-    dropdown.innerHTML =
-        categories
-            .map(
-                category => `
-                    <a
-                        href="#/san-pham?category=${encodeURIComponent(category)}"
-                    >
-                        ${category}
-                    </a>
-                `
-            )
-            .join("");
-
+    dropdown.innerHTML = categories
+        .map(category => `
+            <a href="#/san-pham?category=${encodeURIComponent(category)}">
+                ${category}
+            </a>
+        `)
+        .join("");
 }
 
+function updateCartBadge() {
+
+    const badge =
+        document.querySelector(
+            ".cart-count"
+        );
+
+    if (!badge) return;
+
+    const cart =
+        JSON.parse(
+            localStorage.getItem(
+                "cart"
+            )
+        ) || [];
+
+    const count =
+        cart.reduce(
+
+            (total, item) =>
+
+                total +
+                item.soLuong,
+
+            0
+
+        );
+
+    badge.textContent =
+        count;
+
+}

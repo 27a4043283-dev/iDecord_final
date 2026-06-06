@@ -1,3 +1,4 @@
+(() => {
 const items =
 document.querySelectorAll(
 ".accordion-item"
@@ -44,3 +45,4 @@ items.forEach(item => {
     });
 
 });
+})();

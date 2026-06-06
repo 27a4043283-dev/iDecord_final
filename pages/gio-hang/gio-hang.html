@@ -1,24 +1,126 @@
 <main class="cart-page">
 
-    <div class="container">
+    <section class="cart-header">
 
-        <div class="page-header">
-
-            <h1 class="page-title">
-                Giỏ Hàng Của Bạn
-            </h1>
-
-            <p class="page-subtitle">
-                Kiểm tra sản phẩm trước khi tiến hành thanh toán
-            </p>
-
+        <div class="cart-header-icon">
+            <i class="fa-solid fa-bag-shopping"></i>
         </div>
 
-        <div id="cart-content">
-
-            <!-- JS render tại đây -->
-
+        <div>
+            <h1>Giỏ Hàng Của Bạn</h1>
+            <p>Chọn sản phẩm bạn muốn thanh toán</p>
         </div>
+
+    </section>
+
+    <div class="cart-layout">
+
+        <!-- Cột trái -->
+        <section class="cart-left">
+
+            <div class="cart-toolbar">
+
+                <label>
+
+                    <input
+                        type="checkbox"
+                        id="selectAll">
+
+                    <span id="selectedCount">
+                        Chọn tất cả
+                    </span>
+
+                </label>
+
+                <button
+                    id="deleteSelectedBtn"
+                    class="delete-selected">
+
+                    <i class="fa-regular fa-trash-can"></i>
+                    Xóa đã chọn
+
+                </button>
+
+            </div>
+
+            <!-- JS render sản phẩm -->
+            <div id="cartItems">
+
+            </div>
+
+            <div class="cart-footer">
+
+                <a
+                    href="#/san-pham"
+                    class="continue-shopping">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Tiếp tục mua sắm
+
+                </a>
+
+            </div>
+
+        </section>
+
+        <!-- Cột phải -->
+        <aside class="cart-right">
+
+            <div class="cart-summary">
+
+                <h2>Tóm tắt đơn hàng</h2>
+
+                <div class="summary-row">
+                    <span>Đã chọn</span>
+                    <strong id="summaryCount">
+                        0 sản phẩm
+                    </strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Tạm tính</span>
+                    <strong id="subtotalPrice">
+                        0 VNĐ
+                    </strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Phí vận chuyển</span>
+                    <strong class="free-shipping">
+                        Miễn phí
+                    </strong>
+                </div>
+
+                <div class="summary-total">
+
+                    <span>Tổng cộng</span>
+
+                    <strong id="totalPrice">
+                        0 VNĐ
+                    </strong>
+
+                </div>
+
+                <button
+                    id="checkoutBtn"
+                    class="checkout-btn">
+
+                    <i class="fa-solid fa-lock"></i>
+                    Thanh toán ngay
+
+                </button>
+
+                <p class="secure-note">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    Thanh toán an toàn, bảo mật thông tin
+
+                </p>
+
+            </div>
+
+        </aside>
 
     </div>
 

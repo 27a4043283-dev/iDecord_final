@@ -1,3 +1,4 @@
+(() => {
 // ======================
 // CONFIG
 // ======================
@@ -242,3 +243,5 @@ function toggleLoadMoreButton() {
             "inline-block";
     }
 }
+
+})();
