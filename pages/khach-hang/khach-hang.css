@@ -1,266 +1,203 @@
-/* =========================
-   KHACH HANG PAGE
-========================= */
-
+/* --- TỔNG QUAN NỀN PAGE --- */
 .customers-page {
-    background: #f8f9fa;
-    min-height: 100vh;
+    background-color: #fcfaf7;
+    color: #655447;
+    padding-bottom: 80px;
+    font-family: system-ui, -apple-system, sans-serif;
 }
-
-/* =========================
-   BANNER
-========================= */
-
-.customers-hero {
-    padding: 80px 20px;
-    text-align: center;
-    background: linear-gradient(
-        135deg,
-        #8b5e3c,
-        #b08968
-    );
-    color: #fff;
-}
-
-.customers-hero h1 {
-    font-size: 2.8rem;
-    margin-bottom: 16px;
-}
-
-.customers-hero p {
-    max-width: 700px;
+.customers-page .container {
+    max-width: 1200px;
     margin: 0 auto;
-    font-size: 1.1rem;
-    line-height: 1.8;
-    opacity: 0.95;
+    padding: 0 20px;
 }
 
-/* =========================
-   QUOTE
-========================= */
-
-.customers-highlight {
-    padding: 50px 20px;
-    background: #fff;
-}
-
-.customers-highlight blockquote {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
-    font-size: 1.4rem;
-    font-style: italic;
-    color: #555;
-    line-height: 1.8;
-}
-
-/* =========================
-   STATS
-========================= */
-
-.customers-stats {
-    padding: 70px 20px;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-}
-
-.stat-card {
-    background: #fff;
-    border-radius: 16px;
-    padding: 35px 25px;
-    text-align: center;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
-    transition: 0.3s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-6px);
-}
-
-.stat-card h2 {
-    font-size: 2.4rem;
-    color: #8b5e3c;
-    margin-bottom: 10px;
-}
-
-.stat-card span {
-    color: #666;
-    font-size: 1rem;
-}
-
-/* =========================
-   FEEDBACK
-========================= */
-
-.feedback-section {
-    padding: 80px 20px;
-}
-
-.section-title {
-    text-align: center;
-    margin-bottom: 50px;
-}
-
-.section-title h2 {
-    font-size: 2rem;
-    margin-bottom: 12px;
-    color: #333;
-}
-
-.section-title p {
-    color: #666;
-    max-width: 650px;
-    margin: 0 auto;
-}
-
-.feedback-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-}
-
-/* =========================
-   CARD
-========================= */
-
-.feedback-card {
-    background: #fff;
-    border-radius: 18px;
-    padding: 24px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
-    transition: 0.3s ease;
-}
-
-.feedback-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-.feedback-header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 18px;
-}
-
-.feedback-avatar {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    background: #8b5e3c;
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.2rem;
-
+/* --- BANNER LỚN ĐẦU TRANG iDECOR --- */
+.idecor-banner {
+    position: relative;
+    width: 100%;
+    height: 320px; /* Độ cao chữ nhật ngang vừa vặn góc nhìn */
+    background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1600&q=80'); /* Thay link ảnh gỗ/nội thất của bạn tại đây */
+    background-size: cover;
+    background-position: center;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 60px;
 }
-
-.feedback-user h3 {
-    margin-bottom: 6px;
-    font-size: 1rem;
-    color: #333;
+.banner-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Làm tối nền để nổi bật chữ */
+    z-index: 1;
 }
-
-.feedback-rating {
-    color: #f4b400;
-    font-size: 1rem;
-}
-
-.feedback-comment {
-    color: #555;
-    line-height: 1.8;
-    margin-bottom: 20px;
-
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.feedback-date {
-    color: #999;
-    font-size: 0.9rem;
-}
-
-/* =========================
-   LOAD MORE
-========================= */
-
-.load-more {
+.banner-content {
+    position: relative;
+    z-index: 2;
     text-align: center;
-    margin-top: 50px;
+}
+.banner-content h1 {
+    font-size: 3rem;
+    color: #ebdccb; /* Màu vàng cam gỗ pastel sang trọng */
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
-.load-more button {
-    border: none;
-    padding: 14px 28px;
-    border-radius: 8px;
-    background: #8b5e3c;
-    color: #fff;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: 0.3s;
+/* --- BA Ô THỐNG KÊ PHÍA TRÊN --- */
+.customers-stats { margin-bottom: 60px; }
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+.stat-card {
+    background: #ffffff; padding: 30px 20px; border-radius: 16px; text-align: center;
+    border: 1px solid #f1eae2; box-shadow: 0 10px 30px rgba(141, 115, 93, 0.04);
+}
+.stat-card h2 { font-size: 2.6rem; color: #bd9a7a; margin: 0 0 6px 0; font-weight: 500; }
+.stat-card span { font-size: 0.95rem; color: #8a7564; }
+
+.section-title { text-align: center; margin-bottom: 50px; }
+.section-title h2 { font-size: 2.2rem; color: #bd9a7a; font-weight: 400; margin-bottom: 12px; }
+.section-title p { color: #5a4b3f; font-size: 1.1rem; margin: 0; }
+
+/* --- GRID DANH SÁCH ĐÁNH GIÁ (4 CỘT PHONG CÁCH YÊN HOA) --- */
+.yenhoa-feedback-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-bottom: 50px;
 }
 
-.load-more button:hover {
-    background: #6d472d;
+/* --- THẺ CARD ĐÃ ĐƯỢC THU NGẮN CHIỀU CAO ẢNH --- */
+.yenhoa-card {
+    background: #ffffff;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid #f3ebe2;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 6px 20px rgba(141, 115, 93, 0.03);
+    transition: all 0.3s ease;
+    padding: 12px;
+}
+.yenhoa-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(141, 115, 93, 0.08);
 }
 
-/* =========================
-   TABLET
-========================= */
-
-@media (max-width: 992px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .feedback-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .customers-hero h1 {
-        font-size: 2.2rem;
-    }
+/* Khung ảnh thực tế được hạ thấp xuống 220px (Hình chữ nhật ngắn, cân đối tuyệt đối) */
+.yenhoa-thumb-wrapper {
+    width: 100%;
+    height: 220px; 
+    border-radius: 18px;
+    overflow: hidden;
+    background-color: #fdfaf7;
+}
+.yenhoa-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 576px) {
-    .customers-hero {
-        padding: 60px 15px;
-    }
-
-    .customers-hero h1 {
-        font-size: 1.8rem;
-    }
-
-    .customers-hero p {
-        font-size: 1rem;
-    }
-
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .feedback-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .stat-card h2 {
-        font-size: 2rem;
-    }
-
-    .feedback-card {
-        padding: 20px;
-    }
+.yenhoa-card-body {
+    padding: 16px 8px 8px 8px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
+
+.yenhoa-rating {
+    color: #ffb703;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+}
+
+/* User Info */
+.yenhoa-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+.yenhoa-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #fdf6ed;
+    color: #bd9a7a;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ebdccb;
+    flex-shrink: 0;
+}
+.yenhoa-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.yenhoa-user-text h3 { font-size: 0.95rem; margin: 0; color: #4a3d31; font-weight: 600; }
+.yenhoa-user-text .customer-job { font-size: 0.8rem; color: #9c8a7c; margin: 2px 0 0 0; }
+
+.yenhoa-comment {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #5c4e43;
+    margin: 0 0 20px 0;
+    flex-grow: 1;
+    font-style: italic;
+}
+
+.yenhoa-tag-wrapper { margin-top: auto; }
+.yenhoa-tag {
+    display: inline-block;
+    background: #fdf5ed;
+    color: #bd9a7a;
+    font-size: 0.78rem;
+    padding: 6px 16px;
+    border-radius: 15px;
+    font-weight: 500;
+    border: 1px solid #f6ebd9;
+}
+
+/* --- BUTTON XEM THÊM --- */
+.load-more { text-align: center; margin-bottom: 60px; }
+.btn-primary, .btn-premium-submit {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #fdf6ed; color: #bd9a7a; border: 1px solid #e6d7c7;
+    padding: 12px 36px; border-radius: 25px; cursor: pointer;
+    font-weight: 500; font-size: 0.95rem; transition: all 0.25s ease;
+}
+.btn-primary:hover, .btn-premium-submit:hover {
+    background: #bd9a7a; color: #ffffff; border-color: #bd9a7a;
+    transform: translateY(-2px);
+}
+
+/* --- FORM GỬI ĐÁNH GIÁ ĐỒNG BỘ --- */
+.feedback-form-section { background-color: #f7f3ee; padding: 60px 0; }
+.form-card-wrapper {
+    background: #ffffff; padding: 40px; border-radius: 20px;
+    max-width: 800px; margin: 0 auto; border: 1px solid #ebdccb;
+    box-shadow: 0 10px 40px rgba(141, 115, 93, 0.04);
+}
+.form-header-zone { margin-bottom: 30px; text-align: center; }
+.form-header-zone h2 { color: #bd9a7a; font-size: 1.6rem; font-weight: 500; margin: 0 0 8px 0; }
+.form-header-zone p { color: #8a7564; font-size: 0.9rem; margin: 0; }
+.premium-form { display: flex; flex-direction: column; gap: 20px; }
+.form-grid-2col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.form-group-custom { display: flex; flex-direction: column; }
+.form-group-custom label { font-size: 0.9rem; font-weight: 500; color: #40352c; margin-bottom: 8px; text-align: left; }
+.form-group-custom input, .form-group-custom select, .form-group-custom textarea {
+    width: 100%; padding: 12px 15px; border: 1px solid #dcd1c4;
+    background-color: #ffffff; color: #4a3e35; border-radius: 8px;
+    font-size: 0.92rem; outline: none; box-sizing: border-box; transition: all 0.2s ease;
+}
+
+/* RESPONSIVE TRÊN DIỆN THOẠI & TABLET */
+@media (max-width: 1100px) { .yenhoa-feedback-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) {
+    .idecor-banner { height: 240px; }
+    .banner-content h1 { font-size: 2.2rem; }
+    .yenhoa-feedback-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .form-grid-2col { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr; gap: 12px; }
+}
+@media (max-width: 480px) { .yenhoa-feedback-grid { grid-template-columns: 1fr; } }

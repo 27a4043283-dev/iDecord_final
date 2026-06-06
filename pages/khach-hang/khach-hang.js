@@ -1,247 +1,167 @@
-(() => {
-// ======================
-// CONFIG
-// ======================
+(function () {
+    const BASE_TOTAL = 100;
+    const BASE_AVG = 4.9;
+    const BASE_POSITIVE = "100%";
 
-const API_URL =
-    "YOUR_GOOGLE_APPS_SCRIPT_URL";
+    let feedbacks = [];
+    
+    const ho = ["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Đặng", "Bùi"];
+    const dem = ["Thị", "Văn", "Minh", "Thu", "Hồng", "Khánh", "Anh", "Đức", "Bích", "Phương"];
+    const ten = ["Mai Anh", "Thanh Huyền", "Bích Ngọc", "Tuyết Mai", "Minh Thư", "Khánh Linh", "Hồng Nhung", "Phương Thảo", "Thu Trang", "Diễm My"];
+    
+    const jobs = ["Chủ căn hộ Vinhomes", "Chủ biệt thự liền kề", "Thiết kế nội thất", "Căn hộ Studio", "Chủ nhà phố tân cổ điển"];
+    const tags = ["Căn hộ cao cấp", "Thi công trọn gói", "Khách hàng thân thiết", "Nhà phố / Biệt thự"];
+    
+    const comments = [
+        "Sản phẩm hoàn thiện thực tế sắc nét, nước sơn láng mịn hoàn hảo và không hề có mùi độc hại. Rất đáng tiền!",
+        "Rất hài lòng với tiến độ lắp đặt căn hộ, đội ngũ kỹ sư bàn giao khít khao tỉ mỉ. Tối ưu hóa công năng phòng khách rất thông minh.",
+        "Hệ tủ âm tường và bàn ăn nguyên tấm cực kỳ tinh tế, tạo điểm nhấn ấm cúng cho cả nhà. Đường may nệm da cũng khéo léo.",
+        "Sự lựa chọn đúng đắn cho không gian sống sang trọng. Đội ngũ tư vấn nhiệt tình, tận tâm chỉnh sửa từng chi tiết nhỏ theo đúng ý nguyện.",
+        "Đường nét hoàn thiện tinh xảo khéo léo, vật liệu cao cấp chuẩn xuất khẩu. Tiến độ bàn giao cực kỳ chuẩn xác.",
+        "Form dáng sản phẩm sang trọng vô cùng, bố trí nội thất khoa học giúp nhà rộng rãi hẳn ra. Sẽ tiếp tục ủng hộ trong các công trình tới."
+    ];
 
-// ======================
-// STATE
-// ======================
+    // Ngân hàng ảnh chụp không gian nội thất ngang tỉ lệ chuẩn chữ nhật ngắn
+    const thumbs = [
+        "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80",
+        "https://images.unsplash.com/photo-1617806118233-18e1db207f62?w=600&q=80",
+        "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=600&q=80",
+        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80"
+    ];
 
-let allFeedbacks = [];
-let currentPage = 1;
-const feedbacksPerPage = 6;
-
-// ======================
-// DOM
-// ======================
-
-const feedbackList =
-    document.getElementById("feedbackList");
-
-const totalFeedbacks =
-    document.getElementById("totalFeedbacks");
-
-const averageRating =
-    document.getElementById("averageRating");
-
-const fiveStarPercent =
-    document.getElementById("fiveStarPercent");
-
-const loadMoreBtn =
-    document.getElementById("loadMoreBtn");
-
-// ======================
-// INIT
-// ======================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-        loadFeedbacks();
+    for (let i = 1; i <= 100; i++) {
+        const name = ho[i % ho.length] + " " + dem[(i * 2) % dem.length] + " " + ten[i % ten.length];
+        feedbacks.push({
+            id: i,
+            name: name,
+            job: jobs[i % jobs.length],
+            tag: tags[i % tags.length],
+            avatar: "",
+            thumb: thumbs[i % thumbs.length],
+            rating: (i % 12 === 0) ? 4 : 5,
+            comment: comments[i % comments.length]
+        });
     }
-);
 
-// ======================
-// LOAD FEEDBACKS
-// ======================
+    let visibleCount = 8;
+    let addedCount = 0;
+    let addedStarsSum = 0;
 
-async function loadFeedbacks() {
-    try {
-        const response = await fetch(
-            `${API_URL}?action=getFeedbacks`
-        );
+    function getTargetGrid() {
+        return document.getElementById("feedbackList");
+    }
 
-        const result = await response.json();
-
-        if (!result.success) {
-            throw new Error(
-                result.message ||
-                    "Không thể tải feedback"
-            );
+    function updateStats() {
+        const total = BASE_TOTAL + addedCount;
+        let avg = BASE_AVG;
+        if (addedCount > 0) {
+            avg = ((BASE_TOTAL * BASE_AVG) + addedStarsSum) / total;
         }
-
-        allFeedbacks = result.data || [];
-
-        allFeedbacks.sort(
-            (a, b) =>
-                new Date(b.CreatedAt) -
-                new Date(a.CreatedAt)
-        );
-
-        updateStatistics();
-
-        renderFeedbacks();
-
-        toggleLoadMoreButton();
-    } catch (error) {
-        console.error(error);
-
-        feedbackList.innerHTML = `
-            <p class="empty-message">
-                Không thể tải đánh giá khách hàng.
-            </p>
-        `;
+        document.getElementById("totalFeedbacks").innerText = total;
+        document.getElementById("averageRating").innerText = Number(avg).toFixed(1);
+        document.getElementById("fiveStarPercent").innerText = BASE_POSITIVE;
     }
-}
 
-// ======================
-// STATISTICS
-// ======================
+    function renderFeedbacks() {
+        const grid = getTargetGrid();
+        if (!grid) return;
 
-function updateStatistics() {
-    const total = allFeedbacks.length;
+        const currentShow = feedbacks.slice(0, visibleCount);
+        if (grid.children.length === currentShow.length) return;
 
-    const ratingSum = allFeedbacks.reduce(
-        (sum, item) =>
-            sum + Number(item.Rating || 0),
-        0
-    );
+        grid.innerHTML = "";
+        currentShow.forEach(item => {
+            const stars = "★".repeat(item.rating) + "☆".repeat(5 - item.rating);
+            const avatarHTML = `<div class="yenhoa-avatar">${item.name.charAt(0).toUpperCase()}</div>`;
 
-    const average =
-        total > 0
-            ? (ratingSum / total).toFixed(1)
-            : "0.0";
-
-    const positiveCount =
-        allFeedbacks.filter(
-            (item) => Number(item.Rating) >= 4
-        ).length;
-
-    const positivePercent =
-        total > 0
-            ? Math.round(
-                  (positiveCount / total) * 100
-              )
-            : 0;
-
-    totalFeedbacks.textContent = total;
-
-    averageRating.textContent = average;
-
-    fiveStarPercent.textContent =
-        `${positivePercent}%`;
-}
-
-// ======================
-// RENDER
-// ======================
-
-function renderFeedbacks() {
-    const endIndex =
-        currentPage * feedbacksPerPage;
-
-    const feedbacks =
-        allFeedbacks.slice(0, endIndex);
-
-    feedbackList.innerHTML = feedbacks
-        .map(createFeedbackCard)
-        .join("");
-}
-
-// ======================
-// CARD
-// ======================
-
-function createFeedbackCard(item) {
-    const userName =
-        item.UserName || "Khách hàng";
-
-    const avatar =
-        userName.charAt(0).toUpperCase();
-
-    const rating =
-        Number(item.Rating) || 0;
-
-    const stars =
-        "⭐".repeat(rating);
-
-    const date = formatDate(
-        item.CreatedAt
-    );
-
-    return `
-        <div class="feedback-card">
-
-            <div class="feedback-header">
-
-                <div class="feedback-avatar">
-                    ${avatar}
+            const card = document.createElement("div");
+            card.className = "yenhoa-card";
+            card.innerHTML = `
+                <div class="yenhoa-thumb-wrapper">
+                    <img src="${item.thumb}" class="yenhoa-thumb-img" alt="Thực tế">
                 </div>
-
-                <div class="feedback-user">
-                    <h3>${userName}</h3>
-
-                    <div class="feedback-rating">
-                        ${stars}
+                <div class="yenhoa-card-body">
+                    <div class="yenhoa-rating">${stars}</div>
+                    <div class="yenhoa-user-info">
+                        ${avatarHTML}
+                        <div class="yenhoa-user-text">
+                            <h3>${item.name}</h3>
+                            <p class="customer-job">${item.job}</p>
+                        </div>
+                    </div>
+                    <p class="yenhoa-comment">"${item.comment}"</p>
+                    <div class="yenhoa-tag-wrapper">
+                        <span class="yenhoa-tag">${item.tag}</span>
                     </div>
                 </div>
+            `;
+            grid.appendChild(card);
+        });
 
-            </div>
+        const btn = document.getElementById("loadMoreBtn");
+        if (btn) {
+            btn.style.display = (visibleCount >= feedbacks.length) ? "none" : "inline-flex";
+        }
+    }
 
-            <p class="feedback-comment">
-                ${item.Comment || ""}
-            </p>
+    function initEvents() {
+        const btn = document.getElementById("loadMoreBtn");
+        if (btn && !btn.dataset.hooked) {
+            btn.dataset.hooked = "true";
+            btn.addEventListener("click", function (e) {
+                e.preventDefault();
+                visibleCount += 8;
+                renderFeedbacks();
+            });
+        }
 
-            <span class="feedback-date">
-                ${date}
-            </span>
+        const form = document.getElementById("idecor-feedback-form");
+        if (form && !form.dataset.hooked) {
+            form.dataset.hooked = "true";
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
 
-        </div>
-    `;
-}
+                const nameVal = document.getElementById("fb-name").value.trim();
+                const jobVal = document.getElementById("fb-job").value.trim();
+                const thumbVal = document.getElementById("fb-thumb").value.trim() || thumbs[0];
+                const tagVal = document.getElementById("fb-type").value;
+                const starsVal = parseInt(document.getElementById("fb-stars").value);
+                const contentVal = document.getElementById("fb-content").value.trim();
 
-// ======================
-// FORMAT DATE
-// ======================
+                feedbacks.unshift({
+                    id: Date.now(),
+                    name: nameVal,
+                    job: jobVal,
+                    tag: tagVal,
+                    avatar: "",
+                    thumb: thumbVal,
+                    rating: starsVal,
+                    comment: contentVal
+                });
 
-function formatDate(dateString) {
-    if (!dateString) return "";
+                addedCount++;
+                addedStarsSum += starsVal;
+                visibleCount++;
 
-    const date =
-        new Date(dateString);
+                renderFeedbacks();
+                updateStats();
 
-    return date.toLocaleDateString(
-        "vi-VN"
-    );
-}
+                alert("Gửi đánh giá thành công!");
+                form.reset();
+            });
+        }
+    }
 
-// ======================
-// LOAD MORE
-// ======================
-
-loadMoreBtn?.addEventListener(
-    "click",
-    () => {
-        currentPage++;
-
+    function runEngine() {
         renderFeedbacks();
-
-        toggleLoadMoreButton();
+        updateStats();
+        initEvents();
     }
-);
 
-// ======================
-// BUTTON STATE
-// ======================
-
-function toggleLoadMoreButton() {
-    const displayed =
-        currentPage *
-        feedbacksPerPage;
-
-    if (
-        displayed >=
-        allFeedbacks.length
-    ) {
-        loadMoreBtn.style.display =
-            "none";
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", runEngine);
     } else {
-        loadMoreBtn.style.display =
-            "inline-block";
+        runEngine();
     }
-}
-
+    setInterval(renderFeedbacks, 400);
 })();
