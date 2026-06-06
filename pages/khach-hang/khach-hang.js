@@ -72,7 +72,9 @@
         grid.innerHTML = "";
         currentShow.forEach(item => {
             const stars = "★".repeat(item.rating) + "☆".repeat(5 - item.rating);
-            const avatarHTML = `<div class="yenhoa-avatar">${item.name.charAt(0).toUpperCase()}</div>`;
+            const avatarHTML = item.avatar
+    ? `<img src="${item.avatar}" class="yenhoa-avatar-img" alt="${item.name}">`
+    : `<div class="yenhoa-avatar">${item.name.charAt(0).toUpperCase()}</div>`;
 
             const card = document.createElement("div");
             card.className = "yenhoa-card";
@@ -123,6 +125,7 @@
 
                 const nameVal = document.getElementById("fb-name").value.trim();
                 const jobVal = document.getElementById("fb-job").value.trim();
+                const avatarVal = document.getElementById("fb-avatar").value.trim();
                 const thumbVal = document.getElementById("fb-thumb").value.trim() || thumbs[0];
                 const tagVal = document.getElementById("fb-type").value;
                 const starsVal = parseInt(document.getElementById("fb-stars").value);
@@ -133,7 +136,7 @@
                     name: nameVal,
                     job: jobVal,
                     tag: tagVal,
-                    avatar: "",
+                    avatar: avatarVal,
                     thumb: thumbVal,
                     rating: starsVal,
                     comment: contentVal
